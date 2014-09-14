@@ -10,4 +10,11 @@
  *
  *= require_self
  *= require_tree .
+
  */
+
+.logo {
+  margin-top: -10px;
+  margin-left: -50px;
+  width: 70px;
+}

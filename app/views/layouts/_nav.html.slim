@@ -1,0 +1,13 @@
+.navbar.navbar-default.navbar-static-top
+  .container
+    .pull-left
+      a.navbar-brand href="#"
+        img.logo src="assets/logo.png"
+    .pull-right
+      -if current_user
+        = current_user.name
+        nbspnbspnbspnbsp
+        img src=(current_user.image)
+        a.btn-primary.btn href='logout' Log out
+      -else
+        a.btn-primary.btn href=(login_path) Log in with Facebook 
