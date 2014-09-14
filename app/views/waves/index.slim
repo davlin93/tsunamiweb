@@ -1,0 +1,29 @@
+title "Tsunami!"
+= render "layouts/nav"
+.container
+  .row
+    .page-header
+      h1#index-title Your Stats
+
+    .col-md-10
+      .row
+        table.table.table-striped
+          thead
+            tr
+              th Wave Content
+              th Times Rippled
+              th Farthest Distance Traveled (mi)
+              th Share
+          tbody
+            - waves.each do |w|
+              tr id="row#{w[:id]}"
+                td 
+                  = w[:content]
+                td 
+                  = number_with_delimiter(w[:rippled].to_i)
+                td 
+                  = number_with_delimiter(w[:distance].to_i)
+                td 
+                  a.btn.btn-default.btn-xs href="" View Map
+                  | &nbsp;
+                  a.btn.btn-default.btn-xs href="#share#{w[:id]}" Share

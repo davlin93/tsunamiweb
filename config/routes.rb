@@ -7,6 +7,8 @@ Tsunami::Application.routes.draw do
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'logout', to: 'sessions#destroy'
 
+  get 'waves', to: 'waves#index'
+
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
