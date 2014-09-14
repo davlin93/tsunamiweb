@@ -2,17 +2,17 @@ development:
   adapter: mysql
   database: tsunami_dev
   username: root
-  password: password
+  password: password2
   host: localhost
 test:
   adapter: mysql
   database: tsunami_test
   username: root
-  password: password
+  password: password2
   host: localhost
 production:
   adapter: mysql
   database: tsunami_prod
   username: root
-  password: password
+  password: password2
   host: localhost

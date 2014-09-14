@@ -1,3 +1,17 @@
 title "Tsunami"
 
 h1#index-title Tsunami
+
+a href=(login_path) Log in with Facebook  
+br
+- if current_user
+  p
+    yo, you're logged in, bro.
+    br
+    Here's your info:
+    br
+    = current_user.name
+    br
+    img src=(current_user.image)
+br
+a href='logout' Log out
