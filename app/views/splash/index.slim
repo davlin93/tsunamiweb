@@ -1,17 +1,39 @@
 title "Tsunami"
+= render "layouts/nav"
+.container style='margin-top:20'
+  .row
+    .page-header
+      h1#index-title Tsunami
 
-h1#index-title Tsunami
-
-a href=(login_path) Log in with Facebook  
-br
-- if current_user
-  p
-    yo, you're logged in, bro.
-    br
-    Here's your info:
-    br
-    = current_user.name
-    br
-    img src=(current_user.image)
-br
-a href='logout' Log out
+    .col-md-10
+      p
+        | Test text
+    .col-md-10
+      .row
+        h2#table-title Your Stats
+        table.table.table-striped
+          thead
+            tr
+              th Wave Content
+              th Times Rippled
+              th Farthest Distance Traveled (mi)
+              th Share
+          tbody
+            tr
+              td Text
+              th 1,400
+              th 3,123
+              th 
+                a.btn.btn-default.btn-xs href='#share' Share
+            tr
+              td Image
+              th 13
+              th 9
+              th 
+                a.btn.btn-default.btn-xs href='#share' Share
+            tr
+              td Video
+              th 32,749
+              th 7,840
+              th 
+                a.btn.btn-default.btn-xs href='#share' Share

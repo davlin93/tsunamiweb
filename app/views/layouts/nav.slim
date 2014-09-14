@@ -1,0 +1,8 @@
+.navbar.navbar-static-top
+  .container.pull-right
+    -if current_user
+      = current_user.name
+      img src=(current_user.image)
+      a href='logout' Log out
+    -else
+      a href=(login_path) Log in with Facebook  
