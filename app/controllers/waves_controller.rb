@@ -1,18 +1,25 @@
 class WavesController < ApplicationController
   def index
     #waves = getWavesFromBackend(current_user.id)
+    content_temp = 'Supercool map with wave path'
     mock_data = [{:id => 1,
-                  :content => 'Text',
+                  :title => 'Confession',
+                  :type => 'Text',
                   :rippled => '1483',
-                  :distance => '3126'},
+                  :distance => '3126',
+                  :content => content_temp},
                  {:id => 2,
-                  :content => 'Video',
+                  :title => 'Band Practice',
+                  :type => 'Video',
                   :rippled => '13',
-                  :distance => '9'},
+                  :distance => '9',
+                  :content => content_temp},
                  {:id => 3,
-                  :content => 'Image',
+                  :title => 'Cat',
+                  :type => 'Image',
                   :rippled => '32749',
-                  :distance => '7840'}]
+                  :distance => '7840',
+                  :content => content_temp}]
     waves = mock_data
 
     render locals: {waves: waves}

@@ -10,20 +10,28 @@ title "Tsunami!"
         table.table.table-striped
           thead
             tr
-              th Wave Content
+              th Title
+              th Type
               th Times Rippled
               th Farthest Distance Traveled (mi)
               th Share
           tbody
             - waves.each do |w|
               tr id="row#{w[:id]}"
+                td
+                  = w[:title]
                 td 
-                  = w[:content]
+                  = w[:type]
                 td 
                   = number_with_delimiter(w[:rippled].to_i)
                 td 
                   = number_with_delimiter(w[:distance].to_i)
                 td 
-                  a.btn.btn-default.btn-xs href="" View Map
+                  a[class="btn btn-default btn-xs" data-toggle="modal" data-target="#viewmap" href=""] View Map
                   | &nbsp;
                   a.btn.btn-default.btn-xs href="#share#{w[:id]}" Share
+              = modal_dialog :id => "viewmap",
+                :header => { :show_close => true, :dismiss => 'modal', :title => w[:title] },
+                :body => { :content => w[:content] },
+                :footer => { :content => content_tag(:button, 'Neat! Bye!', :class => 'btn btn-primary', :data => { :dismiss => 'modal' }) } 
+    
