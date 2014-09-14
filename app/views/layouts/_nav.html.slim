@@ -3,11 +3,14 @@
     .pull-left
       a.navbar-brand href="#"
         img.logo src="assets/logo.png"
-    .pull-right
+    ul.nav.navbar-nav
+      li= link_to "Home", "/"
+      li= link_to "Your Stats", "waves"
+    .pull-right.nav.navbar-nav
       -if current_user
         = current_user.name
-        nbspnbspnbspnbsp
-        img src=(current_user.image)
+        img.user-icon src=(current_user.image)
         a.btn-primary.btn href='logout' Log out
       -else
+        img src="z.jpg" height="50" style="visibility:hidden"
         a.btn-primary.btn href=(login_path) Log in with Facebook 
