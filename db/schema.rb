@@ -11,7 +11,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140914065601) do
+ActiveRecord::Schema.define(:version => 20141111022051) do
+
+  create_table "ripples", :force => true do |t|
+    t.decimal  "lat",        :precision => 10, :scale => 0
+    t.decimal  "long",       :precision => 10, :scale => 0
+    t.decimal  "radius",     :precision => 10, :scale => 0
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.integer  "wave_id"
+    t.integer  "user_id"
+  end
+
+  create_table "splashes", :force => true do |t|
+    t.decimal  "lat",        :precision => 10, :scale => 0
+    t.decimal  "long",       :precision => 10, :scale => 0
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.integer  "wave_id"
+    t.integer  "user_id"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "provider"
@@ -20,6 +39,12 @@ ActiveRecord::Schema.define(:version => 20140914065601) do
     t.string   "image"
     t.string   "token"
     t.datetime "expires_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "waves", :force => true do |t|
+    t.text     "content"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
