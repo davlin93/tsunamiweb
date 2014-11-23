@@ -19,7 +19,7 @@ describe Api::OceanController do
       @user = FactoryGirl.create(:user)
       @wave = FactoryGirl.create(:wave, content: 'test wave')
       @wave1 = FactoryGirl.create(:wave, content: 'test wave 2')
-      get :local_waves, { latitude: 10.0, longitude: 10.0, user_id: @user.id }, { "Accept" => "application/json" }
+      get :local_waves, { latitude: 10.0, longitude: 10.0, guid: @user.guid }, { "Accept" => "application/json" }
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
       expect(body.length).to eq(0)
@@ -42,7 +42,7 @@ describe Api::OceanController do
       @splash3 = FactoryGirl.create(:splash, latitude: 9.250, longitude: 9.250, user: @user)
       @wave3 = FactoryGirl.create(:wave, splash: @splash3)
 
-      get :local_waves, { latitude: 10.0, longitude: 10.0, user_id: @user.id }, { "Accept" => "application/json" }
+      get :local_waves, { latitude: 10.0, longitude: 10.0, guid: @user.guid }, { "Accept" => "application/json" }
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
       expect(body.length).to eq(2)

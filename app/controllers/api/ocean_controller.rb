@@ -6,7 +6,7 @@ class Api::OceanController < ApplicationController
   end
 
   def local_waves
-    @user = User.find_by_id(params[:user_id])
+    @user = User.find_by_guid(params[:guid])
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
     radius = 1.0

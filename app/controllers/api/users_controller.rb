@@ -6,7 +6,7 @@ class Api::UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(name: params[:name])
+    @user = User.new(name: params[:name], guid: params[:guid])
 
     if @user.save
       render json: @user, status: :created
