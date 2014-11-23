@@ -22,20 +22,17 @@ class Api::SplashController < ApplicationController
   end
 
   def create
-    puts params
     @splash = Splash.new(latitude: params[:latitude], longitude: params[:longitude])
     @wave = Wave.new(content: params[:content])
     @user = User.find_by_id(params[:user_id])
     @wave.splash = @splash
     @splash.user = @user
 
-    respond_to do |format|
-      if @splash.save && @wave.save
-        response = {:wave => @wave, :splash => @splash, user: @user}.to_json
-        format.json { render json: response, status: :created }
-      else
-        format.json { render json: @splash.errors, status: :unprocessable_entity }
-      end
+    if @splash.save && @wave.save
+      response = {:wave => @wave, :splash => @splash, user: @user}.to_json
+      render json: response, status: :created
+    else
+      render json: @splash.errors, status: :unprocessable_entity
     end
   end
 end

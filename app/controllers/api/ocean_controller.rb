@@ -15,11 +15,7 @@ class Api::OceanController < ApplicationController
     @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
     @splashes = Splash.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
     @waves = Wave.find(@ripples.map {|r| r.wave_id})
-    puts @waves.class
     @waves = Wave.find(@splashes.map {|s| s.wave_id})
-    puts @waves.class
-
-    puts @waves
 
     response = { waves: [] }
     @waves.each do |wave|
