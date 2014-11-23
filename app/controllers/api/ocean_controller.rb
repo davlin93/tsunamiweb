@@ -9,7 +9,7 @@ class Api::OceanController < ApplicationController
     @user = User.find_by_guid(params[:guid])
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
-    radius = 1.0
+    radius = Ripple::RADIUS
     @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
     @splashes = Splash.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
     @waves = Wave.find(@ripples.map {|r| r.wave_id})
