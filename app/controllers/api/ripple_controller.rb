@@ -23,28 +23,26 @@ class Api::RippleController < ApplicationController
   end
 
   def create
-    @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude], radius: 1)
+    @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude], radius: 1.0)
     @wave = Wave.find(params[:wave_id])
     @user = User.find_by_id(params[:user_id])
     @ripple.user = @user
     @ripple.wave = @wave
 
-    respond_to do |format|
-      if @ripple.save
-        response = {
-          id: @ripple.id,
-          latitude: @ripple.latitude,
-          longitude: @ripple.longitude,
-          radius: @ripple.radius,
-          created_at: @ripple.created_at,
-          updated_at: @ripple.updated_at,
-          user: @ripple.user,
-          wave: @ripple.wave
-        }
-        format.json { render json: response, status: :created }
-      else
-        format.json { render json: @ripple.errors, status: :unprocessable_entity }
-      end
+    if @ripple.save
+      response = {
+        id: @ripple.id,
+        latitude: @ripple.latitude,
+        longitude: @ripple.longitude,
+        radius: @ripple.radius,
+        created_at: @ripple.created_at,
+        updated_at: @ripple.updated_at,
+        user: @ripple.user,
+        wave: @ripple.wave
+      }
+      render json: response, status: :created
+    else
+      render json: @ripple.errors, status: :unprocessable_entity
     end
   end
 end
