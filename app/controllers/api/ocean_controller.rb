@@ -12,8 +12,8 @@ class Api::OceanController < ApplicationController
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
     radius = 1.0
-    @ripples = Ripple.where("latitude BETWEEN ? AND ? AND (longitude BETWEEN ? AND ?)", latitude - radius, latitude + radius, longitude - radius, longitude + radius)
-    @splashes = Splash.where("(latitude BETWEEN ? AND ?) AND (longitude BETWEEN ? AND ?)", latitude - radius, latitude + radius, longitude - radius, longitude + radius)
+    @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
+    @splashes = Splash.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
     @waves = Wave.find(@ripples.map {|r| r.wave_id})
     puts @waves.class
     @waves = Wave.find(@splashes.map {|s| s.wave_id})
