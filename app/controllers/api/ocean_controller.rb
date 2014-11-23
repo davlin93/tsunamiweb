@@ -2,9 +2,7 @@ class Api::OceanController < ApplicationController
   def all_waves
     @waves = Wave.all
 
-    respond_to do |format|
-      format.json { render json: @waves }
-    end
+    render json: @waves
   end
 
   def local_waves
@@ -15,9 +13,9 @@ class Api::OceanController < ApplicationController
     @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
     @splashes = Splash.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
     @waves = Wave.find(@ripples.map {|r| r.wave_id})
-    @waves = Wave.find(@splashes.map {|s| s.wave_id})
+    @waves += Wave.find(@splashes.map {|s| s.wave_id})
 
-    response = { waves: [] }
+    response = []
     @waves.each do |wave|
       json = { 
           id: wave.id,
@@ -25,11 +23,9 @@ class Api::OceanController < ApplicationController
           splash: wave.splash,
           ripples: wave.ripples
         }
-      response[:waves] << json
+      response << json
     end
 
-    respond_to do |format|
-      format.json { render json: response }
-    end
+    render json: response
   end
 end
