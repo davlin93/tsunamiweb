@@ -29,6 +29,10 @@ gem "therubyracer"
 gem "less-rails"
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 
+group :development, :test do
+  gem 'rspec-rails', '~> 3.0'
+end
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
