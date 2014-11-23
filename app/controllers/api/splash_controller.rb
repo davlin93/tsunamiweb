@@ -24,7 +24,7 @@ class Api::SplashController < ApplicationController
   def create
     @splash = Splash.new(latitude: params[:latitude], longitude: params[:longitude])
     @wave = Wave.new(content: params[:content])
-    @user = User.find_by_id(params[:user_id])
+    @user = User.find_by_guid(params[:guid])
     @wave.splash = @splash
     @splash.user = @user
 
