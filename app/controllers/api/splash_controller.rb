@@ -6,8 +6,8 @@ class Api::SplashController < ApplicationController
     @splashes.each do |splash|
       json = {
           id: splash.id,
-          lat: splash.lat,
-          long: splash.long,
+          latitude: splash.latitude,
+          longitude: splash.longitude,
           created_at: splash.created_at,
           updated_at: splash.updated_at,
           user: splash.user,
@@ -23,7 +23,7 @@ class Api::SplashController < ApplicationController
 
   def create
     puts params
-    @splash = Splash.new(lat: params[:lat], long: params[:long])
+    @splash = Splash.new(latitude: params[:latitude], longitude: params[:longitude])
     @wave = Wave.new(content: params[:content])
     @user = User.find_by_id(params[:user_id])
     @wave.splash = @splash
