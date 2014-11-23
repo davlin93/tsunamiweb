@@ -9,6 +9,14 @@ Tsunami::Application.routes.draw do
 
   get 'waves', to: 'waves#index'
 
+  namespace :api do
+    resources :users
+    resources :splash
+    resources :ripple
+    get 'ocean/local_waves', to: 'ocean#local_waves'
+    get 'ocean/all_waves', to: 'ocean#all_waves'
+  end
+
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
