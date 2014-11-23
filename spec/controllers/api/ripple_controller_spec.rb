@@ -3,9 +3,9 @@ require 'rails_helper'
 describe Api::RippleController do
   describe 'POST #create' do
     it 'creates a ripple' do
-      @user = FactoryGirl.create(:user, name: 'David')
-      @wave = FactoryGirl.create(:wave, content: 'test wave')
-      post :create, { latitude: 123.456, longitude: 0.5, wave_id: @wave.id, user_id: @user.id }, { "Content-Type" => "application/json" }
+      @user = FactoryGirl.create(:user)
+      @wave = FactoryGirl.create(:wave)
+      post :create, { latitude: 123.456, longitude: 0.5, wave_id: @wave.id, guid: @user.guid }, { "Content-Type" => "application/json" }
       expect(response.code).to eq('201')
       body = JSON.parse(response.body)
       expect(body["user"]["id"]).to eq(@user.id)
