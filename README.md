@@ -12,44 +12,13 @@ returns all users
 
 ```
 {
-  "name": "David"
+  "guid": "f9852ca7-75e0-4e00-8229-125232ba14f8"
 }
 ```
 creates user and returns
 ```
 {
   ... user info ...
-}
-```
-
-## Splash Endpoint
-
-### GET /api/splash
-
-returns all splashes
-
-### POST /api/splash
-
-```
-{
-  "latitude": 50,
-  "longitude": 50,
-  "content": "waaaave",
-  "user_id": 1
-}
-```
-creates new wave and splash, links them, then returns
-```
-{
-  "wave": {
-    ... wave info ...
-  },
-  "splash": {
-    ... splash info ...
-  },
-  "user": {
-    ... user info ...
-  }
 }
 ```
 
@@ -88,23 +57,54 @@ creates a ripple for wave 1 and returns
 
 returns all waves (content, no location)
 
-### GET /api/ocean/local_waves&latitude=50&longitude=50&user_id=1
+### GET /api/ocean/local_waves?latitude=50&longitude=50&guid=1
 
-returns all waves that have splashes or ripples within radius
+returns all waves that have active ripples within radius
 ```
 [
   {
     (wave)
     "id": 1,
     "content": "waaaave",
-    "splash": {
-      ... splash info ...
-    },
     "ripples": {
       ... ripple info ...
+    },
+    "user": {
+      ... user info ...
     }
   },
 
   ...
 ]
+```
+
+### POST /api/ocean/splash
+
+```
+{
+  "latitude": 123.4567,
+  "longitude": 123.4567,
+  "content": "wave content",
+  "guid": "f9852ca7-75e0-4e00-8229-125232ba14f8"
+}
+```
+creates new wave and ripple, sets ripple as origin ripple for wave, then returns
+```
+{
+  "id": 1,
+  "origin_ripple_id": 1,
+  "content": "wave content",
+  "ripples": [
+    {
+      "id": 1,
+      "latitude": 123.4567,
+      "longitude": 123.4567,
+      "radius": 0.025
+    }
+  ],
+  "user": {
+    "id": 1,
+    "guid": "f9852ca7-75e0-4e00-8229-125232ba14f8"
+  }
+}
 ```
