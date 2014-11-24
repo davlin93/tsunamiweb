@@ -67,6 +67,8 @@ describe Api::OceanController do
       expect(response.code).to eq('201')
       body = JSON.parse(response.body)
       expect(body["content"]).to eq('test wave')
+      expect(body["origin_ripple_id"]).to eq(body["ripples"].first["id"])
+      expect(body["ripples"].first["latitude"]).to eq("1.5")
     end
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141123235958) do
+ActiveRecord::Schema.define(:version => 20141124014006) do
 
   create_table "ripples", :force => true do |t|
     t.decimal  "latitude",   :precision => 7,  :scale => 4
@@ -40,6 +40,9 @@ ActiveRecord::Schema.define(:version => 20141123235958) do
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
     t.integer  "origin_ripple_id"
+    t.integer  "user_id"
   end
+
+  add_index "waves", ["user_id"], :name => "index_waves_on_user_id"
 
 end
