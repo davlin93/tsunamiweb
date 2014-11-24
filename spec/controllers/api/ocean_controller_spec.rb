@@ -25,22 +25,29 @@ describe Api::OceanController do
       expect(body.length).to eq(0)
     end
 
-    it 'returns waves with splashes within range' do
+    it 'returns waves with ripples within range' do
       @user = FactoryGirl.create(:user)
 
       # in range
       in_range = []
-      @splash = FactoryGirl.create(:splash, latitude: 10.000, longitude: 10.000, user: @user)
-      @wave = FactoryGirl.create(:wave, splash: @splash)
-      @splash1 = FactoryGirl.create(:splash, latitude: 9.500, longitude: 9.500, user: @user)
-      @wave1 = FactoryGirl.create(:wave, splash: @splash1)
+      @ripple = FactoryGirl.create(:ripple, latitude: 10.000, longitude: 10.000, user: @user)
+      @wave = FactoryGirl.create(:wave)
+      @wave.ripples << @ripple
+      @ripple1 = FactoryGirl.create(:ripple, latitude: 10.0 - (Ripple::RADIUS / 2),
+        longitude: 10.0 - (Ripple::RADIUS / 2), user: @user)
+      @wave1 = FactoryGirl.create(:wave)
+      @wave1.ripples << @ripple1
       in_range << @wave.id << @wave1.id
 
       # out of range
-      @splash2 = FactoryGirl.create(:splash, latitude: 8.999, longitude: 10.000, user: @user)
-      @wave2 = FactoryGirl.create(:wave, splash: @splash2)
-      @splash3 = FactoryGirl.create(:splash, latitude: 9.250, longitude: 9.250, user: @user)
-      @wave3 = FactoryGirl.create(:wave, splash: @splash3)
+      @ripple2 = FactoryGirl.create(:ripple,
+        latitude: 10.0 - (Ripple::RADIUS + 0.001), longitude: 10.000, user: @user)
+      @wave2 = FactoryGirl.create(:wave)
+      @wave2.ripples << @ripple2
+      @ripple3 = FactoryGirl.create(:ripple, latitude: 10.0 - (Ripple::RADIUS * 0.75),
+        longitude: 10.0 - (Ripple::RADIUS * 0.75), user: @user)
+      @wave3 = FactoryGirl.create(:wave)
+      @wave3.ripples << @ripple3
 
       get :local_waves, { latitude: 10.0, longitude: 10.0, guid: @user.guid }, { "Accept" => "application/json" }
       expect(response.code).to eq('200')
@@ -50,6 +57,18 @@ describe Api::OceanController do
       body.each do |wave|
         expect(in_range.include?(wave["id"])).to eq(true)
       end
+    end
+  end
+
+  describe 'POST #splash' do
+    it 'creates a splash' do
+      @user = FactoryGirl.create(:user)
+      post :splash, { latitude: 1.5, longitude: 0.5, content: 'test wave', guid: @user.guid }, { "Content-Type" => "application/json" }
+      expect(response.code).to eq('201')
+      body = JSON.parse(response.body)
+      expect(body["content"]).to eq('test wave')
+      expect(body["origin_ripple_id"]).to eq(body["ripples"].first["id"])
+      expect(body["ripples"].first["latitude"]).to eq("1.5")
     end
   end
 end

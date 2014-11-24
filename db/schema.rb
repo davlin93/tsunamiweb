@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141123231054) do
+ActiveRecord::Schema.define(:version => 20141124014006) do
 
   create_table "ripples", :force => true do |t|
     t.decimal  "latitude",   :precision => 7,  :scale => 4
@@ -19,15 +19,6 @@ ActiveRecord::Schema.define(:version => 20141123231054) do
     t.decimal  "radius",     :precision => 10, :scale => 0
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
-    t.integer  "wave_id"
-    t.integer  "user_id"
-  end
-
-  create_table "splashes", :force => true do |t|
-    t.decimal  "latitude",   :precision => 7, :scale => 4
-    t.decimal  "longitude",  :precision => 7, :scale => 4
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
     t.integer  "wave_id"
     t.integer  "user_id"
   end
@@ -46,8 +37,12 @@ ActiveRecord::Schema.define(:version => 20141123231054) do
 
   create_table "waves", :force => true do |t|
     t.text     "content"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.integer  "origin_ripple_id"
+    t.integer  "user_id"
   end
+
+  add_index "waves", ["user_id"], :name => "index_waves_on_user_id"
 
 end

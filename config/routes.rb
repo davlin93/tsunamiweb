@@ -15,6 +15,7 @@ Tsunami::Application.routes.draw do
     resources :ripple
     get 'ocean/local_waves', to: 'ocean#local_waves'
     get 'ocean/all_waves', to: 'ocean#all_waves'
+    post 'ocean/splash', to: 'ocean#splash'
   end
 
   # Sample of regular route:
