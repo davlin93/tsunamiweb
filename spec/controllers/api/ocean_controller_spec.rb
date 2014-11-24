@@ -33,16 +33,19 @@ describe Api::OceanController do
       @ripple = FactoryGirl.create(:ripple, latitude: 10.000, longitude: 10.000, user: @user)
       @wave = FactoryGirl.create(:wave)
       @wave.ripples << @ripple
-      @ripple1 = FactoryGirl.create(:ripple, latitude: 9.500, longitude: 9.500, user: @user)
+      @ripple1 = FactoryGirl.create(:ripple, latitude: 10.0 - (Ripple::RADIUS / 2),
+        longitude: 10.0 - (Ripple::RADIUS / 2), user: @user)
       @wave1 = FactoryGirl.create(:wave)
       @wave1.ripples << @ripple1
       in_range << @wave.id << @wave1.id
 
       # out of range
-      @ripple2 = FactoryGirl.create(:ripple, latitude: 8.999, longitude: 10.000, user: @user)
+      @ripple2 = FactoryGirl.create(:ripple,
+        latitude: 10.0 - (Ripple::RADIUS + 0.001), longitude: 10.000, user: @user)
       @wave2 = FactoryGirl.create(:wave)
       @wave2.ripples << @ripple2
-      @ripple3 = FactoryGirl.create(:ripple, latitude: 9.250, longitude: 9.250, user: @user)
+      @ripple3 = FactoryGirl.create(:ripple, latitude: 10.0 - (Ripple::RADIUS * 0.75),
+        longitude: 10.0 - (Ripple::RADIUS * 0.75), user: @user)
       @wave3 = FactoryGirl.create(:wave)
       @wave3.ripples << @ripple3
 
