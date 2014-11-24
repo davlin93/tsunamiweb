@@ -58,6 +58,33 @@ describe Api::OceanController do
         expect(in_range.include?(wave["id"])).to eq(true)
       end
     end
+
+    it 'returns only waves with active ripples in range' do
+      t = Time.now
+      Timecop.freeze(t)
+      @user = FactoryGirl.create(:user)
+      @ripple = FactoryGirl.create(:ripple,
+        latitude: 1.0, longitude: 1.0, user: @user)
+      @wave1 = FactoryGirl.create(:wave)
+      @wave1.ripples << @ripple
+      Timecop.travel(Time.now - 3.days)
+      @inactive_ripple = FactoryGirl.create(:ripple,
+        latitude: 1.0, longitude: 1.0, user: @user)
+      @wave2 = FactoryGirl.create(:wave)
+      @wave2.ripples << @inactive_ripple
+      @wave1.ripples << @inactive_ripple
+
+      Timecop.travel(t)
+
+      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: @user.guid }, { "Accept" => "application/json" }
+      
+      expect(response.code).to eq('200')
+      body = JSON.parse(response.body)
+      expect(body.length).to eq(1)
+      expect(body.first["id"]).to eq(@wave1.id)
+      expect(body.first["ripples"].length).to eq(2) # wave still holds all ripples
+      Timecop.return
+    end
   end
 
   describe 'POST #splash' do

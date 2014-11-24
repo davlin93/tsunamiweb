@@ -10,7 +10,16 @@ class Api::OceanController < ApplicationController
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
     radius = Ripple::RADIUS
-    @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
+    @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ? AND (status = 'active')", latitude, longitude, radius)
+    @ripples.delete_if do |ripple|
+      # this should be a resque worker or something to auto update
+      # updating these here seems very bad, temporary for small scale
+      if ripple.created_at < 2.days.ago
+        ripple.status = 'inactive'
+        ripple.save
+        true
+      end
+    end
     @waves = Wave.find(@ripples.map {|r| r.wave_id})
 
     response = []
