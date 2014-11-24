@@ -11,21 +11,41 @@ class Api::OceanController < ApplicationController
     longitude = params[:longitude].to_f
     radius = Ripple::RADIUS
     @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
-    @splashes = Splash.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius)
     @waves = Wave.find(@ripples.map {|r| r.wave_id})
-    @waves += Wave.find(@splashes.map {|s| s.wave_id})
 
     response = []
     @waves.each do |wave|
       json = { 
           id: wave.id,
           content: wave.content,
-          splash: wave.splash,
-          ripples: wave.ripples
+          ripples: wave.ripples,
+          user: @user
         }
       response << json
     end
 
     render json: response
+  end
+
+  def splash
+    @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude])
+    @wave = Wave.new(content: params[:content], origin_ripple_id: @ripple.id)
+    @wave.ripples << @ripple
+    @user = User.find_by_guid(params[:guid])
+    @user.ripples << @ripple
+    @user.wave << @wave
+
+    if @ripple.save && @wave.save
+      response = {
+        id: @wave.id,
+        origin_ripple_id: @wave.origin_ripple_id,
+        content: @wave.content,
+        ripples: [@ripple],
+        user: @user
+      }
+      render json: response, status: :created
+    else
+      render json: @wave.errors, status: :unprocessable_entity
+    end
   end
 end

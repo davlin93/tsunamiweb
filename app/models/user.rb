@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   attr_accessible :expires_at, :image, :name, :provider, :token, :uid, :guid
 
-  has_many :ripple
-  has_many :splash
+  has_many :ripples
+  has_many :wave
 
   def self.omniauth(auth)
     where(auth.slice(:provider, :uid)).first_or_initialize.tap do |user|
