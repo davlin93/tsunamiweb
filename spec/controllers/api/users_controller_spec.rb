@@ -13,9 +13,9 @@ describe Api::UsersController do
   describe 'POST #create' do
     it 'creates a user' do
       @user = FactoryGirl.build(:user)
-      post :create, { name: @user.name, guid: @user.guid }, { "Content-Type" => "application/json" }
+      post :create, {  guid: @user.guid }, { "Content-Type" => "application/json" }
       expect(response.code).to eq('201')
-      expect(User.first.name).to eq(@user.name)
+      expect(User.first.guid).to eq(@user.guid)
     end
   end
 end
