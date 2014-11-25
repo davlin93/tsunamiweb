@@ -38,7 +38,9 @@ returns all ripples
   "guid": "f9852ca7-75e0-4e00-8229-125232ba14f8"
 }
 ```
-creates a ripple for wave 1 and returns
+* creates a ripple for wave 1
+* adds ripple to user associated with guid, if no user exists, creates one
+then returns:
 ```
 {
   "id": 1,
@@ -95,7 +97,10 @@ returns all waves that have active ripples within radius
   "guid": "f9852ca7-75e0-4e00-8229-125232ba14f8"
 }
 ```
-creates new wave and ripple, sets ripple as origin ripple for wave, then returns
+* creates new wave and ripple
+* sets ripple as origin ripple for wave
+* adds new wave and ripple to user associated with guid, creates one if none exist
+then returns
 ```
 {
   "id": 1,
