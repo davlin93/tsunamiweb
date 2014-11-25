@@ -41,7 +41,13 @@ class Api::OceanController < ApplicationController
     @ripple.save
     @wave = Wave.new(content: params[:content], origin_ripple_id: @ripple.id)
     @wave.ripples << @ripple
-    @user = User.find_by_guid(params[:guid])
+    u = User.find_by_guid(params[:guid])
+    if u.nil?
+      @user = User.new(guid: params[:guid])
+      @user.save
+    else
+      @user = u
+    end
     @user.ripples << @ripple
     @user.waves << @wave
 

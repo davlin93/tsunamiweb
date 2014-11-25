@@ -25,9 +25,15 @@ class Api::RippleController < ApplicationController
   def create
     @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude], radius: Ripple::RADIUS)
     @wave = Wave.find(params[:wave_id])
-    @user = User.find_by_guid(params[:guid])
-    @ripple.user = @user
     @ripple.wave = @wave
+    u = User.find_by_guid(params[:guid])
+    if u.nil?
+      @user = User.new(guid: params[:guid])
+      @user.save
+    else
+      @user = u
+    end
+    @user.ripples << @ripple
 
     if @ripple.save
       response = {
