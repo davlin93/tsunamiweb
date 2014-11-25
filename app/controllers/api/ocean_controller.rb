@@ -37,7 +37,7 @@ class Api::OceanController < ApplicationController
   end
 
   def splash
-    @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude])
+    @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude], radius: Ripple::RADIUS)
     @ripple.save
     @wave = Wave.new(content: params[:content], origin_ripple_id: @ripple.id)
     @wave.ripples << @ripple
