@@ -88,14 +88,27 @@ describe Api::OceanController do
   end
 
   describe 'POST #splash' do
-    it 'creates a splash' do
-      @user = FactoryGirl.create(:user)
-      post :splash, { latitude: 1.5, longitude: 0.5, content: 'test wave', guid: @user.guid }, { "Content-Type" => "application/json" }
-      expect(response.code).to eq('201')
-      body = JSON.parse(response.body)
-      expect(body["content"]).to eq('test wave')
-      expect(body["origin_ripple_id"]).to eq(body["ripples"].first["id"])
-      expect(body["ripples"].first["latitude"]).to eq("1.5")
+    context 'creates a splash' do
+      it 'with an existing user guid' do
+        @user = FactoryGirl.create(:user)
+        post :splash, { latitude: 1.5, longitude: 0.5, content: 'test wave', guid: @user.guid }, { "Content-Type" => "application/json" }
+        expect(response.code).to eq('201')
+        body = JSON.parse(response.body)
+        expect(body["content"]).to eq('test wave')
+        expect(body["origin_ripple_id"]).to eq(body["ripples"].first["id"])
+        expect(body["ripples"].first["latitude"]).to eq("1.5")
+      end
+
+      it 'without an exisiting user' do
+        guid = "12345"
+        post :splash, { latitude: 1.5, longitude: 0.5, content: 'test wave', guid: guid }, { "Content-Type" => "application/json" }
+        expect(response.code).to eq('201')
+        body = JSON.parse(response.body)
+        expect(body["content"]).to eq('test wave')
+        expect(body["origin_ripple_id"]).to eq(body["ripples"].first["id"])
+        expect(body["ripples"].first["latitude"]).to eq("1.5")
+        expect(User.find_by_guid(guid)).to_not eq(nil)
+      end
     end
   end
 end
