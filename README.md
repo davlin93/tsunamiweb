@@ -88,6 +88,7 @@ returns all waves that have active ripples within radius
       "title": "wave title",
       "body": "wave body"
     },
+    "views": 100,
     "ripples": [
       {
         ... ripple info ...
@@ -126,6 +127,7 @@ then returns
     "title": "wave title",
     "body": "wave body"
   },
+  "views": 100,
   "ripples": [
     {
       "id": 1,
