@@ -26,6 +26,7 @@ class Api::OceanController < ApplicationController
     @waves.each do |wave|
       json = { 
           id: wave.id,
+          origin_ripple_id: wave.origin_ripple_id,
           content: wave.content,
           ripples: wave.ripples,
           user: @user
