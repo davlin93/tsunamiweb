@@ -24,9 +24,12 @@ class Api::OceanController < ApplicationController
 
     response = []
     @waves.each do |wave|
+      wave.views += 1
+      wave.save
       json = { 
           id: wave.id,
           origin_ripple_id: wave.origin_ripple_id,
+          views: wave.views,
           content: wave.content,
           ripples: wave.ripples,
           user: @user
@@ -57,6 +60,7 @@ class Api::OceanController < ApplicationController
       response = {
         id: @wave.id,
         origin_ripple_id: @wave.origin_ripple_id,
+        views: @wave.views,
         content: @wave.content,
         ripples: [@ripple],
         user: @user
