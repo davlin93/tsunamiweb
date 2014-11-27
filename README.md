@@ -70,7 +70,10 @@ returns all waves that have active ripples within radius
   {
     "id": 1,
     "origin_ripple_id": 1,
-    "content": "waaaave",
+    "content": {
+      "title": "wave title",
+      "body": "wave body"
+    },
     "ripples": [
       {
         ... ripple info ...
@@ -105,7 +108,10 @@ then returns
 {
   "id": 1,
   "origin_ripple_id": 1,
-  "content": "wave content",
+  "content": {
+    "title": "wave title",
+    "body": "wave body"
+  },
   "ripples": [
     {
       "id": 1,

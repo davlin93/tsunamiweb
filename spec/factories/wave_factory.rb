@@ -1,5 +1,7 @@
 FactoryGirl.define do
   factory :wave do
-    content 'Test wave content'
+    after(:create) do |wave|
+      FactoryGirl.create(:content, wave: wave)
+    end
   end
 end

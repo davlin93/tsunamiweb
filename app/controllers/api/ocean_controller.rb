@@ -39,7 +39,8 @@ class Api::OceanController < ApplicationController
   def splash
     @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude], radius: Ripple::RADIUS)
     @ripple.save
-    @wave = Wave.new(content: params[:content], origin_ripple_id: @ripple.id)
+    @content = Content.new(title: params[:title], body: params[:body])
+    @wave = Wave.new(content: @content, origin_ripple_id: @ripple.id)
     @wave.ripples << @ripple
     u = User.find_by_guid(params[:guid])
     if u.nil?
