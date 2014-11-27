@@ -25,6 +25,19 @@ describe Api::OceanController do
       expect(body.length).to eq(0)
     end
 
+    it 'increments views for waves fetched' do
+      @wave = FactoryGirl.create(:wave)
+      @ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, wave: @wave)
+      get :local_waves, { latitude: @ripple.latitude, longitude: @ripple.longitude, guid: "123" }, { "Accept" => "application/json" }
+      expect(response.code).to eq('200')
+      body = JSON.parse(response.body)
+      expect(body.first["views"]).to eq(1)
+      get :local_waves, { latitude: @ripple.latitude, longitude: @ripple.longitude, guid: "123" }, { "Accept" => "application/json" }
+      expect(response.code).to eq('200')
+      body = JSON.parse(response.body)
+      expect(body.first["views"]).to eq(2)
+    end
+
     it 'returns waves with ripples within range' do
       @user = FactoryGirl.create(:user)
 
