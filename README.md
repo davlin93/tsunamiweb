@@ -1,6 +1,20 @@
 It's Tsunami, motherfuckers.
 
-# API
+# Heroku setup
+
+### Toolbelt setup
+* https://toolbelt.heroku.com/
+
+### Executing commands
+`heroku run -a tsunami-mobile`
+* reset db:reset
+ * resets db
+ * runs drop, create, schema:load
+
+`heroku logs -a tsunami-mobile`
+ * append --tail to tail
+
+# API Docs
 
 ## User Endpoint
 
