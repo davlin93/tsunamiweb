@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Api::OceanController do
   describe 'GET #all_waves' do
     it 'returns all waves regardless of geo' do
-      @wave = FactoryGirl.create(:wave, content: 'test wave')
-      @wave1 = FactoryGirl.create(:wave, content: 'test wave 2')
+      @wave = FactoryGirl.create(:wave)
+      @wave1 = FactoryGirl.create(:wave)
       get :all_waves, {}, { "Accept" => "application/json" }
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
@@ -17,8 +17,8 @@ describe Api::OceanController do
   describe 'GET #local_waves' do
     it 'does not return waves with no splashes or ripples' do
       @user = FactoryGirl.create(:user)
-      @wave = FactoryGirl.create(:wave, content: 'test wave')
-      @wave1 = FactoryGirl.create(:wave, content: 'test wave 2')
+      @wave = FactoryGirl.create(:wave)
+      @wave1 = FactoryGirl.create(:wave)
       get :local_waves, { latitude: 10.0, longitude: 10.0, guid: @user.guid }, { "Accept" => "application/json" }
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
@@ -91,20 +91,20 @@ describe Api::OceanController do
     context 'creates a splash' do
       it 'with an existing user guid' do
         @user = FactoryGirl.create(:user)
-        post :splash, { latitude: 1.5, longitude: 0.5, content: 'test wave', guid: @user.guid }, { "Content-Type" => "application/json" }
+        post :splash, { latitude: 1.5, longitude: 0.5, title: 'test title', body: 'test wave', guid: @user.guid }, { "Content-Type" => "application/json" }
         expect(response.code).to eq('201')
         body = JSON.parse(response.body)
-        expect(body["content"]).to eq('test wave')
+        expect(body["content"]["body"]).to eq('test wave')
         expect(body["origin_ripple_id"]).to eq(body["ripples"].first["id"])
         expect(body["ripples"].first["latitude"]).to eq("1.5")
       end
 
       it 'without an exisiting user' do
         guid = "12345"
-        post :splash, { latitude: 1.5, longitude: 0.5, content: 'test wave', guid: guid }, { "Content-Type" => "application/json" }
+        post :splash, { latitude: 1.5, longitude: 0.5, title: 'test title', body: 'test wave', guid: guid }, { "Content-Type" => "application/json" }
         expect(response.code).to eq('201')
         body = JSON.parse(response.body)
-        expect(body["content"]).to eq('test wave')
+        expect(body["content"]["body"]).to eq('test wave')
         expect(body["origin_ripple_id"]).to eq(body["ripples"].first["id"])
         expect(body["ripples"].first["latitude"]).to eq("1.5")
         expect(User.find_by_guid(guid)).to_not eq(nil)
