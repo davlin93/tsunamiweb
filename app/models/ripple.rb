@@ -5,4 +5,13 @@ class Ripple < ActiveRecord::Base
 
   belongs_to :wave
   belongs_to :user
+
+  def self.list_coords(ids)
+    ripples = Ripple.find(ids)
+    response = []
+    ripples.each do |r|
+      response << { latitude: r.latitude, longitude: r.longitude }
+    end
+    response
+  end
 end

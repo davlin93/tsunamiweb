@@ -1,0 +1,28 @@
+.container
+  .row
+    .col-lg-3
+      #dashboard-form
+        form#form
+          | Title:
+          br
+          input#title name='title' type='text'
+          br
+          | Content:
+          br
+          textarea#body.textarea name='body' rows='5'
+          br
+          | Latitude (leave blank for random around Boston)
+          br
+          input#latitude name='latitude' type='text'
+          br
+          | Longitude (leave blank for random around Boston)
+          br
+          input#longitude name='longitude' type='text'
+          br
+          button#submit Generate
+      .results
+        | Coords:  
+        #coord-results
+
+    .col-lg-9
+      iframe#dashboard-iframe.col-lg-7 src='http://www.darrinward.com/lat-long/'
