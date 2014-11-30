@@ -8,6 +8,8 @@ Tsunami::Application.routes.draw do
   get 'logout', to: 'sessions#destroy'
 
   get 'waves', to: 'waves#index'
+  get 'api/dashboard', to: 'dashboard#index'
+  post 'api/dashboard', to: 'dashboard#generate'
 
   namespace :api do
     resources :users

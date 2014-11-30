@@ -15,4 +15,26 @@
 //= require twitter/bootstrap
 //= require_tree .
 
-$('#viewmap').modal(options)
+$(document).ready(function() {
+  $('#submit').click(function() {
+    event.preventDefault();
+
+    data = { 
+      title: $('#title').value,
+      body: $('#body').value,
+      latitude: $('#latitude').value,
+      longitude: $('#longitude').value };
+
+    $.ajax({
+      url: '/api/dashboard',
+      method: 'POST',
+      data: data
+    }).done(function(data){
+      out = ""
+      $.each(data, function(index, value) {
+        out += value["latitude"] + "," + value["longitude"] + "<br />";
+      });
+      $('#coord-results').html(out);
+    });
+  });
+});
