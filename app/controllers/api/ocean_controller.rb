@@ -34,6 +34,7 @@ class Api::OceanController < ApplicationController
       end
     end
 
+    puts "ripples: #{@ripples}"
     if @ripples.empty?
       @waves = []
     else
