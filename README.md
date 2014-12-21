@@ -111,7 +111,8 @@ returns all waves that have active ripples within radius
 {
   "latitude": 123.4567,
   "longitude": 123.4567,
-  "content": "wave content",
+  "title": "wave title",
+  "body": "wave body",
   "guid": "f9852ca7-75e0-4e00-8229-125232ba14f8"
 }
 ```
