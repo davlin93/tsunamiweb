@@ -23,7 +23,7 @@ class Api::OceanController < ApplicationController
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
     radius = Ripple::RADIUS
-    @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ? AND (status = 'active')", latitude, longitude, radius)
+    @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ? AND (status = 'active')", latitude, longitude, radius).all
     @ripples.delete_if do |ripple|
       # this should be a resque worker or something to auto update
       # updating these here seems very bad, temporary for small scale
