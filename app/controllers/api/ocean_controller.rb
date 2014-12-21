@@ -33,7 +33,12 @@ class Api::OceanController < ApplicationController
         true
       end
     end
-    @waves = Wave.find(@ripples.map {|r| r.wave_id})
+
+    if @ripples.empty?
+      @waves = []
+    else
+      @waves = Wave.find(@ripples.map {|r| r.wave_id})
+    end
 
     response = []
     @waves.each do |wave|
