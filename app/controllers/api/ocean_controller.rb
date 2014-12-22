@@ -77,8 +77,8 @@ class Api::OceanController < ApplicationController
       @user.save
       puts "guid: #{@user.guid} id: #{@user.id}"
     else
-      puts "user existed, #{@user.guid}"
       @user = u
+      puts "user existed, #{@user.guid}"
     end
     @wave.save
     @user.ripples << @ripple
