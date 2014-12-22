@@ -10,7 +10,7 @@ class Api::OceanController < ApplicationController
           views: wave.views,
           content: wave.content,
           ripples: wave.ripples,
-          user: @user
+          user: wave.user
         }
       response << json
     end
@@ -71,12 +71,16 @@ class Api::OceanController < ApplicationController
     @wave = Wave.new(content: @content, origin_ripple_id: @ripple.id)
     @wave.ripples << @ripple
     u = User.find_by_guid(params[:guid])
+    puts "user: #{u}"
     if u.nil?
       @user = User.new(guid: params[:guid])
       @user.save
+      puts "guid: #{@user.guid} id: #{@user.id}"
     else
+      puts "user existed, #{@user.guid}"
       @user = u
     end
+    @wave.save
     @user.ripples << @ripple
     @user.waves << @wave
 
