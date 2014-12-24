@@ -19,11 +19,7 @@ $(document).ready(function() {
   $('#submit').click(function() {
     event.preventDefault();
 
-    data = { 
-      title: $('#title').value,
-      body: $('#body').value,
-      latitude: $('#latitude').value,
-      longitude: $('#longitude').value };
+    data = $('#form').serialize();
 
     $.ajax({
       url: '/api/dashboard',
