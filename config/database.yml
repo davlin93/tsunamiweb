@@ -1,18 +1,21 @@
 development:
-  adapter: mysql
+  adapter: postgresql
+  encoding: unicode
   database: tsunami_dev
-  username: root
-  password: password2
-  host: localhost
+  pool: 5
+  username: tsunami
+  password: password
 test:
-  adapter: mysql
+  adapter: postgresql
+  encoding: unicode
   database: tsunami_test
-  username: root
-  password: password2
-  host: localhost
+  pool: 5
+  username: tsunami
+  password: password
 production:
-  adapter: mysql
+  adapter: postgresql
+  encoding: unicode
   database: tsunami_prod
-  username: root
-  password: password2
-  host: localhost
+  pool: 5
+  username: tsunami
+  password: password
