@@ -12,7 +12,9 @@ Tsunami::Application.routes.draw do
   post 'api/dashboard', to: 'dashboard#generate'
 
   namespace :api do
-    resources :users
+    resources :users, only: [:index]
+    get 'users/waves', to: 'users#waves'
+
     resources :splash
     resources :ripple
     get 'ocean/local_waves', to: 'ocean#local_waves'
