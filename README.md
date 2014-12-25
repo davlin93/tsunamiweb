@@ -22,9 +22,16 @@ It's Tsunami, motherfuckers.
 
 returns all users
 
-### GET /api/users/waves?guid=7890
+### GET /api/users/stats?guid=7890
 
-returns a list of waves the user splashed
+```
+{
+  "splashes": 2,
+  "ripples": 3,
+  "views_across_waves": 94,
+  "ripples_across_waves": 3
+}
+```
 
 ### POST /api/users
 
