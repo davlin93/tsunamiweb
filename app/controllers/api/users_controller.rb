@@ -15,28 +15,28 @@ class Api::UsersController < ApplicationController
     end
   end
 
-  def waves
+  def stats
     @user = User.find_by_guid(params[:guid])
 
     if @user.nil?
       render json: { errors: "could not find user with guid #{params[:guid]}" },
         status: :bad_request
     else
-      response = []
-      waves = @user.waves
-      waves.each do |wave|
-        json = {
-            created_at: wave.created_at,
-            updated_at: wave.updated_at,
-            id: wave.id,
-            origin_ripple_id: wave.origin_ripple_id,
-            views: wave.views,
-            content: wave.content,
-            ripples: wave.ripples,
-            user: @user
-          }
-        response << json
-      end
+      viewed = @user.viewed
+      ripples = @user.ripples.count
+      ripple_chance = ripples.to_f / viewed.to_f
+      splashes = @user.waves.count
+      views_across_waves = Wave.where('user_id = ?', @user.id).sum('views')
+      ripples_across_waves = Wave.where('waves.user_id = ?', @user.id).joins(:ripples).count
+      response = {
+          viewed: viewed,
+          ripples: ripples,
+          splashes: splashes,
+          ripple_chance: ripple_chance,
+          views_across_waves: views_across_waves,
+          ripples_across_waves: ripples_across_waves
+      }
+
       render json: response, status: :ok
     end
   end

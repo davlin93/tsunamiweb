@@ -20,6 +20,12 @@ class Api::OceanController < ApplicationController
 
   def local_waves
     @user = User.find_by_guid(params[:guid])
+
+    if @user.nil?
+      @user = User.new(guid: params[:guid])
+      @user.save
+    end
+
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
     radius = Ripple::RADIUS
@@ -39,13 +45,14 @@ class Api::OceanController < ApplicationController
       @waves = []
     else
       puts @ripples.map(&:wave_id)
-      @waves = Wave.find(@ripples.map(&:wave_id))
+      @waves = Wave.limit(10).find(@ripples.map(&:wave_id))
     end
 
     response = []
     wave_ids = []
     @waves.each do |wave|
       wave.views += 1
+      @user.viewed += 1
       wave_ids << wave.id
       wave.save
       json = { 
@@ -59,6 +66,7 @@ class Api::OceanController < ApplicationController
       response << json
     end
 
+    @user.save
     ViewRecord.create_view_records(@user, wave_ids)
 
     render json: response

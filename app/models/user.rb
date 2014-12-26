@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-  attr_accessible :expires_at, :image, :name, :provider, :token, :uid, :guid
+  attr_accessible :expires_at, :image, :name, :provider, :token, :uid, :guid,
+    :viewed
 
   has_many :ripples
   has_many :waves
