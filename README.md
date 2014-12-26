@@ -26,7 +26,9 @@ returns all users
 
 ```
 {
+  "viewed": 4,
   "splashes": 2,
+  "ripple_chance": 0.50,
   "ripples": 3,
   "views_across_waves": 94,
   "ripples_across_waves": 3
