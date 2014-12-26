@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141224185014) do
+ActiveRecord::Schema.define(:version => 20141226010638) do
 
   create_table "contents", :force => true do |t|
     t.string  "title"
@@ -37,9 +37,10 @@ ActiveRecord::Schema.define(:version => 20141224185014) do
     t.string   "image"
     t.string   "token"
     t.datetime "expires_at"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
     t.string   "guid"
+    t.integer  "viewed",     :default => 0
   end
 
   create_table "view_records", :force => true do |t|
