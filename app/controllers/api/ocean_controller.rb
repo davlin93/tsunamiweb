@@ -45,7 +45,7 @@ class Api::OceanController < ApplicationController
       @waves = []
     else
       puts @ripples.map(&:wave_id)
-      @waves = Wave.find(@ripples.map(&:wave_id))
+      @waves = Wave.limit(10).find(@ripples.map(&:wave_id))
     end
 
     response = []
