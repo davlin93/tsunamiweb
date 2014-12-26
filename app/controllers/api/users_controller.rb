@@ -22,13 +22,17 @@ class Api::UsersController < ApplicationController
       render json: { errors: "could not find user with guid #{params[:guid]}" },
         status: :bad_request
     else
-      splashes = @user.waves.count
+      viewed = @user.viewed
       ripples = @user.ripples.count
+      ripple_chance = ripples.to_f / viewed.to_f
+      splashes = @user.waves.count
       views_across_waves = Wave.where('user_id = ?', @user.id).sum('views')
       ripples_across_waves = Wave.where('waves.user_id = ?', @user.id).joins(:ripples).count
       response = {
-          splashes: splashes,
+          viewed: viewed,
           ripples: ripples,
+          splashes: splashes,
+          ripple_chance: ripple_chance,
           views_across_waves: views_across_waves,
           ripples_across_waves: ripples_across_waves
       }
