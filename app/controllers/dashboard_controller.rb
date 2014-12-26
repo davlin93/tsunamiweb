@@ -5,6 +5,8 @@ class DashboardController < ApplicationController
   end
 
   def generate
+    user = User.find_by_guid('root') || User.create(guid: 'root')
+
     r = Random.new
     if params[:latitude].present? && params[:longitude].present?
       ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude], radius: Ripple::RADIUS)
@@ -19,13 +21,16 @@ class DashboardController < ApplicationController
         radius: Ripple::RADIUS)
     end
 
+    ripple.user = user
     ripple.save
     ripple_ids = [ripple.id]
     content = Content.new(title: params[:title], body: params[:body])
     content.save
     wave = Wave.new(content: content, origin_ripple_id: ripple.id)
+    wave.user = user
     wave.save
     wave.ripples << ripple
+
     r.rand((3..15)).times do
       # TODO: change square area to circle area
       lat = r.rand * ((ripple.latitude + 0.025) - (ripple.latitude - 0.025)) + (ripple.latitude - 0.025)
