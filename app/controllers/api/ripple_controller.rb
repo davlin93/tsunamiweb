@@ -26,14 +26,18 @@ class Api::RippleController < ApplicationController
     @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude], radius: Ripple::RADIUS)
     @wave = Wave.find(params[:wave_id])
     @ripple.wave = @wave
-    u = User.find_by_guid(params[:guid])
-    if u.nil?
+
+    @user = User.find_by_guid(params[:guid])
+    if @user.nil?
       @user = User.new(guid: params[:guid])
-      @user.save
-    else
-      @user = u
     end
+
+    @user.viewed += 1
+    @user.save
     @user.ripples << @ripple
+
+    @wave.views += 1
+    @wave.save
 
     if @ripple.save
       response = {
@@ -49,6 +53,26 @@ class Api::RippleController < ApplicationController
       render json: response, status: :created
     else
       render json: @ripple.errors, status: :unprocessable_entity
+    end
+  end
+
+  def dismiss
+    @user = User.find_by_guid(params[:guid])
+
+    if @user.nil?
+      @user = User.new(guid: params[:guid])
+    end
+
+    @wave = Wave.find_by_id(params[:wave_id])
+
+    @wave.views += 1
+    @user.viewed += 1
+    ViewRecord.create(user_id: @user.id, wave_id: @wave.id)
+
+    if @wave.save && @user.save
+      render json: { }, status: :ok
+    else
+      render json: @wave.errors.messages, status: :unprocessable_entity
     end
   end
 end
