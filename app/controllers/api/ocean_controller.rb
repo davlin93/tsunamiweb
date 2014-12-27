@@ -109,6 +109,10 @@ class Api::OceanController < ApplicationController
   end
 
   def dismiss
+    unless params[:wave_id] && params[:guid]
+      render(json: { errors: "missing params. Received: #{params}" }, status: :bad_request) && return
+    end
+
     @user = User.find_by_guid(params[:guid])
 
     if @user.nil?
@@ -116,6 +120,10 @@ class Api::OceanController < ApplicationController
     end
 
     @wave = Wave.find_by_id(params[:wave_id])
+
+    if @wave.nil?
+      render(json: { errors: "Could not find wave with id #{params[:wave_id]}" }, status: :bad_request) && return
+    end
 
     @wave.views += 1
     @user.viewed += 1
