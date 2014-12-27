@@ -87,18 +87,6 @@ then returns:
 }
 ```
 
-### POST /api/ripple/dismiss
-
-request:
-```
-{
-  "guid": "12345",
-  "wave_id": 1
-}
-```
-
-Increments wave views and user viewed count, then returns OK
-
 ## Ocean Endpoint
 
 ### GET /api/ocean/all_waves
@@ -174,3 +162,15 @@ then returns
   }
 }
 ```
+
+### POST /api/ocean/dismiss
+
+request:
+```
+{
+  "guid": "12345",
+  "wave_id": 1
+}
+```
+
+Increments wave views and user viewed count, then returns OK
