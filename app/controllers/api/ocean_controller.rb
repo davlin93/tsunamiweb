@@ -51,10 +51,6 @@ class Api::OceanController < ApplicationController
     response = []
     wave_ids = []
     @waves.each do |wave|
-      wave.views += 1
-      @user.viewed += 1
-      wave_ids << wave.id
-      wave.save
       json = { 
           id: wave.id,
           origin_ripple_id: wave.origin_ripple_id,
@@ -65,9 +61,6 @@ class Api::OceanController < ApplicationController
         }
       response << json
     end
-
-    @user.save
-    ViewRecord.create_view_records(@user, wave_ids)
 
     render json: response
   end

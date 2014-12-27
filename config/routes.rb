@@ -17,7 +17,8 @@ Tsunami::Application.routes.draw do
     get 'users/waves', to: 'users#waves'
 
     resources :splash
-    resources :ripple
+    resources :ripple, only: [:index, :create]
+    post 'ripple/dismiss', to: 'ripple#dismiss'
     get 'ocean/local_waves', to: 'ocean#local_waves'
     get 'ocean/all_waves', to: 'ocean#all_waves'
     post 'ocean/splash', to: 'ocean#splash'
