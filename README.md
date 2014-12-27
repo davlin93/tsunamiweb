@@ -35,6 +35,10 @@ returns all users
 }
 ```
 
+### GET /api/users/waves?guid=7890
+
+Returns the list of waves the user splashed
+
 ### POST /api/users
 
 ```
