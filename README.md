@@ -108,6 +108,8 @@ returns all waves that have active ripples within radius
 [
   {
     "id": 1,
+    "created_at": "2014-12-26T05:23:56Z",
+    "updated_at": "2014-12-26T05:23:56Z",
     "origin_ripple_id": 1,
     "content": {
       "title": "wave title",
