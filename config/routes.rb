@@ -14,6 +14,7 @@ Tsunami::Application.routes.draw do
   namespace :api do
     resources :users, only: [:index, :create]
     get 'users/stats', to: 'users#stats'
+    get 'users/waves', to: 'users#waves'
 
     resources :splash
     resources :ripple
