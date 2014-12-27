@@ -24,7 +24,15 @@ class Api::UsersController < ApplicationController
     else
       viewed = @user.viewed
       ripples = @user.ripples.count
-      ripple_chance = ripples.to_f / viewed.to_f
+
+      if ripples == 0
+        ripple_chance = 0.0
+      elsif viewed == 0
+        ripple_chance = 1.0
+      else
+        ripple_chance = ripples.to_f / viewed.to_f
+      end
+
       splashes = @user.waves.count
       views_across_waves = Wave.where('user_id = ?', @user.id).sum('views')
       ripples_across_waves = Wave.where('waves.user_id = ?', @user.id).joins(:ripples).count
@@ -32,7 +40,7 @@ class Api::UsersController < ApplicationController
           viewed: viewed,
           ripples: ripples,
           splashes: splashes,
-          ripple_chance: ripple_chance,
+          ripple_chance: ripple_chance.round(2),
           views_across_waves: views_across_waves,
           ripples_across_waves: ripples_across_waves
       }
