@@ -6,6 +6,8 @@ class Api::OceanController < ApplicationController
     @waves.each do |wave|
       json = { 
           id: wave.id,
+          created_at: wave.created_at,
+          updated_at: wave.updated_at,
           origin_ripple_id: wave.origin_ripple_id,
           views: wave.views,
           content: wave.content,
@@ -53,6 +55,8 @@ class Api::OceanController < ApplicationController
     @waves.each do |wave|
       json = { 
           id: wave.id,
+          created_at: wave.created_at,
+          updated_at: wave.updated_at,
           origin_ripple_id: wave.origin_ripple_id,
           views: wave.views,
           content: wave.content,
