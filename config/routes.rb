@@ -18,7 +18,7 @@ Tsunami::Application.routes.draw do
 
     resources :splash
     resources :ripple, only: [:index, :create]
-    post 'ripple/dismiss', to: 'ripple#dismiss'
+    post 'ocean/dismiss', to: 'ocean#dismiss'
     get 'ocean/local_waves', to: 'ocean#local_waves'
     get 'ocean/all_waves', to: 'ocean#all_waves'
     post 'ocean/splash', to: 'ocean#splash'

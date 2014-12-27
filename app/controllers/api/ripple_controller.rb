@@ -55,24 +55,4 @@ class Api::RippleController < ApplicationController
       render json: @ripple.errors, status: :unprocessable_entity
     end
   end
-
-  def dismiss
-    @user = User.find_by_guid(params[:guid])
-
-    if @user.nil?
-      @user = User.new(guid: params[:guid])
-    end
-
-    @wave = Wave.find_by_id(params[:wave_id])
-
-    @wave.views += 1
-    @user.viewed += 1
-    ViewRecord.create(user_id: @user.id, wave_id: @wave.id)
-
-    if @wave.save && @user.save
-      render json: { }, status: :ok
-    else
-      render json: @wave.errors.messages, status: :unprocessable_entity
-    end
-  end
 end
