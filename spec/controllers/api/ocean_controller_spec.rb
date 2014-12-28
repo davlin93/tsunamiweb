@@ -25,19 +25,6 @@ describe Api::OceanController do
       expect(body.length).to eq(0)
     end
 
-    it 'increments views for waves fetched' do
-      @wave = FactoryGirl.create(:wave)
-      @ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, wave: @wave)
-      get :local_waves, { latitude: @ripple.latitude, longitude: @ripple.longitude, guid: "123" }, { "Accept" => "application/json" }
-      expect(response.code).to eq('200')
-      body = JSON.parse(response.body)
-      expect(body.first["views"]).to eq(1)
-      get :local_waves, { latitude: @ripple.latitude, longitude: @ripple.longitude, guid: "123" }, { "Accept" => "application/json" }
-      expect(response.code).to eq('200')
-      body = JSON.parse(response.body)
-      expect(body.first["views"]).to eq(2)
-    end
-
     it 'returns waves with ripples within range' do
       @user = FactoryGirl.create(:user)
 
@@ -98,6 +85,21 @@ describe Api::OceanController do
       expect(body.first["ripples"].length).to eq(2) # wave still holds all ripples
       Timecop.return
     end
+
+    it 'returns only first 10 waves' do
+      user = FactoryGirl.create(:user)
+      15.times do
+        ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, user: @user)
+        wave = FactoryGirl.create(:wave)
+        wave.ripples << ripple
+      end
+
+      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+
+      expect(response.code).to eq('200')
+      body = JSON.parse(response.body)
+      expect(body.length).to eq(10)
+    end
   end
 
   describe 'POST #splash' do
@@ -122,6 +124,22 @@ describe Api::OceanController do
         expect(body["ripples"].first["latitude"]).to eq("1.5")
         expect(User.find_by_guid(guid)).to_not eq(nil)
       end
+    end
+  end
+
+  describe 'POST #dismiss' do
+    it 'increments views on a wave' do
+      wave = FactoryGirl.create(:wave)
+      user = FactoryGirl.create(:user)
+
+      expect(wave.views).to eq(0)
+
+      post :dismiss, { wave_id: wave.id, guid: user.guid }, { "Content-Type" => "application/json" }
+
+      wave.reload && user.reload
+      expect(response.code).to eq('200')
+      expect(user.viewed).to eq(1)
+      expect(wave.views).to eq(1)
     end
   end
 end
