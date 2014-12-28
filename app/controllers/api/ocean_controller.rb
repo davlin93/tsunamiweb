@@ -32,22 +32,31 @@ class Api::OceanController < ApplicationController
     longitude = params[:longitude].to_f
     radius = Ripple::RADIUS
     @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ? AND (status = 'active')", latitude, longitude, radius).all
+
     @ripples.delete_if do |ripple|
       # this should be a resque worker or something to auto update
       # updating these here seems very bad, temporary for small scale
       if ripple.created_at < 2.days.ago
         ripple.status = 'inactive'
-        ripple.save
+        ripple.save # n+1 query
         true
       end
     end
 
-    puts "ripples: #{@ripples}"
     if @ripples.empty?
       @waves = []
     else
-      puts @ripples.map(&:wave_id)
-      @waves = Wave.limit(10).find(@ripples.map(&:wave_id))
+      wave_ids = @ripples.map(&:wave_id)
+      @waves =  Wave.joins('FULL JOIN view_records ON view_records.wave_id = waves.id')
+                    .where('waves.id IN (?) AND (view_records.wave_id IS NULL OR view_records.user_id != ?)', wave_ids, @user.id)
+                    .limit(10)
+
+      if @waves.empty?
+        ViewRecord.where('user_id = ?', @user.id).destroy_all
+        @waves =  Wave.where('waves.id IN (?)', wave_ids)
+                      .order('created_at DESC')
+                      .limit(10)
+      end
     end
 
     response = []
@@ -59,8 +68,8 @@ class Api::OceanController < ApplicationController
           updated_at: wave.updated_at,
           origin_ripple_id: wave.origin_ripple_id,
           views: wave.views,
-          content: wave.content,
-          ripples: wave.ripples,
+          content: wave.content, # n+1 query
+          ripples: wave.ripples, # n+1 query
           user: wave.user
         }
       response << json
@@ -70,7 +79,6 @@ class Api::OceanController < ApplicationController
   end
 
   def splash
-    puts "params: #{params}"
     unless params[:latitude] && params[:longitude] && params[:title] && params[:body] && params[:guid]
       render(json: { errors: 'missing params' }, status: :bad_request) && return
     end
@@ -80,14 +88,12 @@ class Api::OceanController < ApplicationController
     @wave = Wave.new(content: @content, origin_ripple_id: @ripple.id)
     @wave.ripples << @ripple
     u = User.find_by_guid(params[:guid])
-    puts "user: #{u}"
+
     if u.nil?
       @user = User.new(guid: params[:guid])
       @user.save
-      puts "guid: #{@user.guid} id: #{@user.id}"
     else
       @user = u
-      puts "user existed, #{@user.guid}"
     end
     @wave.save
     @user.ripples << @ripple
