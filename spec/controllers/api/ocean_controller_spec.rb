@@ -100,6 +100,69 @@ describe Api::OceanController do
       body = JSON.parse(response.body)
       expect(body.length).to eq(10)
     end
+
+    it 'returns only new waves' do
+      user = FactoryGirl.create(:user)
+      wave = FactoryGirl.create(:wave)
+      ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, user: user, wave: wave)
+
+      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+
+      expect(response.code).to eq('200')
+      body = JSON.parse(response.body)
+      expect(body.length).to eq(1)
+
+      post :dismiss, { wave_id: wave.id, guid: user.guid }, { "Content-Type" => "application/json" }
+
+      expect(response.code).to eq('200')
+
+      new_wave = FactoryGirl.create(:wave)
+      new_ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, user: user, wave: new_wave)
+
+      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+
+      expect(response.code).to eq('200')
+      body = JSON.parse(response.body)
+      expect(body.length).to eq(1)
+    end
+
+    it 'returns old waves again once there are no more new waves' do
+      user = FactoryGirl.create(:user)
+      10.times do
+        wave = FactoryGirl.create(:wave)
+        ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, user: user, wave: wave)
+      end
+
+      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+
+      expect(response.code).to eq('200')
+      body = JSON.parse(response.body)
+      expect(body.length).to eq(10)
+
+      Wave.all.each do |w|
+        post :dismiss, { wave_id: w.id, guid: user.guid }, { "Content-Type" => "application/json" }
+
+        expect(response.code).to eq('200')
+      end
+
+      new_wave = FactoryGirl.create(:wave)
+      new_ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, user: user, wave: new_wave)
+
+      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+
+      expect(response.code).to eq('200')
+      body = JSON.parse(response.body)
+      expect(body.length).to eq(1)
+
+      post :dismiss, { wave_id: new_wave.id, guid: user.guid }, { "Content-Type" => "application/json" }
+
+      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+
+      expect(response.code).to eq('200')
+      body = JSON.parse(response.body)
+      expect(body.length).to eq(10)
+      expect(body.first['id']).to eq(new_wave.id)
+    end
   end
 
   describe 'POST #splash' do

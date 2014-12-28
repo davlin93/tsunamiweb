@@ -46,7 +46,17 @@ class Api::OceanController < ApplicationController
     if @ripples.empty?
       @waves = []
     else
-      @waves = Wave.limit(10).find(@ripples.map(&:wave_id))
+      wave_ids = @ripples.map(&:wave_id)
+      @waves =  Wave.joins('FULL JOIN view_records ON view_records.wave_id = waves.id')
+                    .where('waves.id IN (?) AND (view_records.wave_id IS NULL OR view_records.user_id != ?)', wave_ids, @user.id)
+                    .limit(10)
+
+      if @waves.empty?
+        ViewRecord.where('user_id = ?', @user.id).destroy_all
+        @waves =  Wave.where('waves.id IN (?)', wave_ids)
+                      .order('created_at DESC')
+                      .limit(10)
+      end
     end
 
     response = []
