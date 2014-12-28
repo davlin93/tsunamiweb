@@ -43,4 +43,13 @@ class DashboardController < ApplicationController
 
     render json: Ripple.list_coords(ripple_ids)
   end
+
+  def undo
+    wave = Wave.last
+    wave.ripples.destroy_all
+    wave.content.destroy
+    wave.destroy
+
+    render nothing: true
+  end
 end

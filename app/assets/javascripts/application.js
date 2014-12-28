@@ -33,4 +33,16 @@ $(document).ready(function() {
       $('#coord-results').html(out);
     });
   });
+
+  $('#undo').click(function() {
+    event.preventDefault();
+
+    $.ajax({
+      url: '/api/dashboard',
+      method: 'DELETE',
+      data: {}
+    }).done(function(data) {
+      $('#coord-results').html('Last wave deleted!');
+    });
+  });
 });

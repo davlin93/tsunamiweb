@@ -10,6 +10,7 @@ Tsunami::Application.routes.draw do
   get 'waves', to: 'waves#index'
   get 'api/dashboard', to: 'dashboard#index'
   post 'api/dashboard', to: 'dashboard#generate'
+  delete 'api/dashboard', to: 'dashboard#undo'
 
   namespace :api do
     resources :users, only: [:index, :create]
