@@ -47,15 +47,19 @@ class Api::OceanController < ApplicationController
       @waves = []
     else
       wave_ids = @ripples.map(&:wave_id).uniq
-      @waves =  Wave.select('DISTINCT waves.*')
-                    .joins('FULL JOIN view_records ON view_records.wave_id = waves.id')
-                    .where('waves.id IN (?) AND (view_records.wave_id IS NULL OR view_records.user_id != ?)', wave_ids, @user.id)
-                    .limit(10)
+      viewed_wave_ids = Wave.joins('FULL JOIN view_records ON view_records.wave_id = waves.id')
+                            .where('waves.id IN (?) AND (view_records.user_id = ?)', wave_ids, @user.id)
+                            .pluck('waves.id')
 
-      if @waves.empty?
+      new_wave_ids = wave_ids - viewed_wave_ids
+
+      if new_wave_ids.empty?
         ViewRecord.where('user_id = ?', @user.id).destroy_all
         @waves =  Wave.where('waves.id IN (?)', wave_ids)
                       .order('created_at DESC')
+                      .limit(10)
+      else
+        @waves =  Wave.where('waves.id IN (?)', new_wave_ids)
                       .limit(10)
       end
     end
