@@ -68,7 +68,7 @@ class Api::OceanController < ApplicationController
           updated_at: wave.updated_at,
           origin_ripple_id: wave.origin_ripple_id,
           views: wave.views,
-          content: wave.content, # n+1 query
+          content: wave.content.to_response, # n+1 query
           ripples: wave.ripples, # n+1 query
           user: wave.user
         }
