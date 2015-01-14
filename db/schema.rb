@@ -11,12 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141226010638) do
+ActiveRecord::Schema.define(:version => 20150114201635) do
 
   create_table "contents", :force => true do |t|
     t.string  "title"
     t.string  "body"
     t.integer "wave_id"
+    t.string  "content_type"
   end
 
   create_table "ripples", :force => true do |t|
