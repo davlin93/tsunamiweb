@@ -21,12 +21,7 @@ class Api::OceanController < ApplicationController
   end
 
   def local_waves
-    @user = User.find_by_guid(params[:guid])
-
-    if @user.nil?
-      @user = User.new(guid: params[:guid])
-      @user.save
-    end
+    @user = User.process_guid(params[:guid])
 
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
@@ -92,14 +87,9 @@ class Api::OceanController < ApplicationController
     @content = Content.new(title: params[:title], body: params[:body])
     @wave = Wave.new(content: @content, origin_ripple_id: @ripple.id)
     @wave.ripples << @ripple
-    u = User.find_by_guid(params[:guid])
 
-    if u.nil?
-      @user = User.new(guid: params[:guid])
-      @user.save
-    else
-      @user = u
-    end
+    @user = User.process_guid(params[:guid])
+
     @wave.save
     @user.ripples << @ripple
     @user.waves << @wave
@@ -124,11 +114,7 @@ class Api::OceanController < ApplicationController
       render(json: { errors: "missing params. Received: #{params}" }, status: :bad_request) && return
     end
 
-    @user = User.find_by_guid(params[:guid])
-
-    if @user.nil?
-      @user = User.new(guid: params[:guid])
-    end
+    @user = User.process_guid(params[:guid])
 
     @wave = Wave.find_by_id(params[:wave_id])
 

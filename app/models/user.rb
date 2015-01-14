@@ -16,4 +16,14 @@ class User < ActiveRecord::Base
       user.save!
     end
   end
+
+  def self.process_guid(guid)
+    user = User.find_by_guid(guid)
+
+    if user.nil?
+      User.create(guid: guid)
+    else
+      user
+    end
+  end
 end
