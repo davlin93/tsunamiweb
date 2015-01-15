@@ -117,7 +117,14 @@ returns all waves that have active ripples within radius
     ],
     "user": {
       ... user info ...
-    }
+    },
+    "comments": [
+      {
+        "user_id": 1,
+        "wave_id": 1,
+        "body": "comment body"
+      }
+    ]
   },
 
   ...
@@ -174,3 +181,15 @@ request:
 ```
 
 Increments wave views and user viewed count, then returns OK
+
+## Comments Endpoint
+### POST /api/comments
+request:
+```
+{
+  "guid": "12345",
+  "wave_id": 1,
+  "body": "comment"
+}
+```
+creates a comment on wave 1 from user with guid 12345, then returns 201
