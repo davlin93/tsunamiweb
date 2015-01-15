@@ -23,6 +23,8 @@ Tsunami::Application.routes.draw do
     get 'ocean/local_waves', to: 'ocean#local_waves'
     get 'ocean/all_waves', to: 'ocean#all_waves'
     post 'ocean/splash', to: 'ocean#splash'
+
+    resources :comments, only: [:create]
   end
 
   # Sample of regular route:
