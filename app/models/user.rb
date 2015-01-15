@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
 
   has_many :ripples
   has_many :waves
+  has_many :comments
 
   def self.omniauth(auth)
     where(auth.slice(:provider, :uid)).first_or_initialize.tap do |user|

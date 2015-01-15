@@ -4,4 +4,5 @@ class Wave < ActiveRecord::Base
   has_many :ripples
   belongs_to :user
   has_one :content
+  has_many :comments
 end
