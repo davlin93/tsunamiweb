@@ -122,7 +122,9 @@ returns all waves that have active ripples within radius
       {
         "user_id": 1,
         "wave_id": 1,
-        "body": "comment body"
+        "body": "comment body",
+        "created_at": "2014-12-26T05:23:56Z",
+        "updated_at": "2014-12-26T05:23:56Z"
       }
     ]
   },
