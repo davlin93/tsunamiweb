@@ -163,6 +163,22 @@ describe Api::OceanController do
       expect(body.length).to eq(10)
       expect(body.first['id']).to eq(new_wave.id)
     end
+
+    it 'returns comments on wave' do
+      wave1 = FactoryGirl.create(:wave)
+      wave2 = FactoryGirl.create(:wave)
+      user = FactoryGirl.create(:user)
+      FactoryGirl.create(:ripple, latitude: 1, longitude: 1, wave: wave1)
+      Comment.create(user_id: user.id, wave_id: wave1.id, body: 'comment body')
+      Comment.create(user_id: user.id, wave_id: wave1.id, body: 'comment2 body')
+      Comment.create(user_id: user.id, wave_id: wave2.id, body: 'comment3 body')
+
+      get :local_waves, { latitude: 1, longitude: 1, guid: user.guid }, { 'Accept' => 'application/json' }
+
+      expect(response.code).to eq('200')
+      body = JSON.parse(response.body)
+      expect(body.first['comments'].length).to eq(2)
+    end
   end
 
   describe 'POST #splash' do
