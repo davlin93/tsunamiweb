@@ -70,6 +70,7 @@ class Api::OceanController < ApplicationController
           views: wave.views,
           content: wave.content.to_response, # n+1 query
           ripples: wave.ripples, # n+1 query
+          comments: wave.comments,
           user: wave.user
         }
       response << json
