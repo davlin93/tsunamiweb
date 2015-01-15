@@ -24,7 +24,7 @@ class DashboardController < ApplicationController
     ripple.user = user
     ripple.save
     ripple_ids = [ripple.id]
-    content = Content.new(title: params[:title], body: params[:body])
+    content = Content.new(title: params[:title], body: params[:body], content_type: params[:content_type])
     content.save
     wave = Wave.new(content: content, origin_ripple_id: ripple.id)
     wave.user = user
