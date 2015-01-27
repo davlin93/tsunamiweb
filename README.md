@@ -49,7 +49,10 @@ Returns the list of waves the user splashed
 creates user and returns
 ```
 {
-  ... user info ...
+  "id": 1,
+  "created_at": "2014-12-26T05:23:56Z",
+  "updated_at": "2014-12-26T05:23:56Z",
+  "viewed": 0
 }
 ```
 
