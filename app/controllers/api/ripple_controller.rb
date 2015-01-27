@@ -27,10 +27,7 @@ class Api::RippleController < ApplicationController
     @wave = Wave.find(params[:wave_id])
     @ripple.wave = @wave
 
-    @user = User.find_by_guid(params[:guid])
-    if @user.nil?
-      @user = User.new(guid: params[:guid])
-    end
+    @user = User.find(params[:user_id])
 
     @user.viewed += 1
     @user.save
