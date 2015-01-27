@@ -8,6 +8,8 @@ class Api::CommentsController < ApplicationController
 
     comment = Comment.create(user_id: user.id, wave_id: params[:wave_id], body: params[:body])
 
-    render json: {}, status: :created
+    wave = Wave.find(params[:wave_id])
+
+    render json: wave.to_response, status: :created
   end
 end
