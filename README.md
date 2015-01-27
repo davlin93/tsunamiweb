@@ -22,7 +22,7 @@ It's Tsunami, motherfuckers.
 
 returns all users
 
-### GET /api/users/stats?guid=7890
+### GET /api/users/stats?user_id=7890
 
 ```
 {
@@ -35,16 +35,14 @@ returns all users
 }
 ```
 
-### GET /api/users/waves?guid=7890
+### GET /api/users/waves?user_id=7890
 
 Returns the list of waves the user splashed
 
 ### POST /api/users
 
 ```
-{
-  "guid": "f9852ca7-75e0-4e00-8229-125232ba14f8"
-}
+{ }
 ```
 creates user and returns
 ```
@@ -69,11 +67,11 @@ returns all ripples
   "latitude": 50,
   "longitude": 50,
   "wave_id": 1,
-  "guid": "f9852ca7-75e0-4e00-8229-125232ba14f8"
+  "user_id": 1
 }
 ```
 * creates a ripple for wave 1
-* adds ripple to user associated with guid, if no user exists, creates one
+* adds ripple to user associated with user_id
 then returns:
 ```
 {
@@ -96,7 +94,7 @@ then returns:
 
 returns all waves (content, no location)
 
-### GET /api/ocean/local_waves?latitude=50&longitude=50&guid=1
+### GET /api/ocean/local_waves?latitude=50&longitude=50&user_id=1
 
 returns all waves that have active ripples within radius
 ```
@@ -144,12 +142,12 @@ returns all waves that have active ripples within radius
   "longitude": 123.4567,
   "title": "wave title",
   "body": "wave body",
-  "guid": "f9852ca7-75e0-4e00-8229-125232ba14f8"
+  "user_id": 1
 }
 ```
 * creates new wave and ripple
 * sets ripple as origin ripple for wave
-* adds new wave and ripple to user associated with guid, creates one if none exist
+* adds new wave and ripple to user associated with user_id
 then returns
 ```
 {
@@ -169,8 +167,7 @@ then returns
     }
   ],
   "user": {
-    "id": 1,
-    "guid": "f9852ca7-75e0-4e00-8229-125232ba14f8"
+    "id": 1
   }
 }
 ```
@@ -180,7 +177,7 @@ then returns
 request:
 ```
 {
-  "guid": "12345",
+  "user_id": 1,
   "wave_id": 1
 }
 ```
@@ -192,9 +189,9 @@ Increments wave views and user viewed count, then returns OK
 request:
 ```
 {
-  "guid": "12345",
+  "user_id": 1,
   "wave_id": 1,
   "body": "comment"
 }
 ```
-creates a comment on wave 1 from user with guid 12345, then returns 201
+creates a comment on wave 1 from user with id 1, then returns 201

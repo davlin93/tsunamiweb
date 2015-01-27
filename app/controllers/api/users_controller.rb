@@ -6,7 +6,7 @@ class Api::UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(guid: params[:guid])
+    @user = User.new
 
     if @user.save
       render json: @user, status: :created
@@ -16,10 +16,10 @@ class Api::UsersController < ApplicationController
   end
 
   def stats
-    @user = User.find_by_guid(params[:guid])
+    @user = User.find(params[:user_id])
 
     if @user.nil?
-      render json: { errors: "could not find user with guid #{params[:guid]}" },
+      render json: { errors: "could not find user with id #{params[:user_id]}" },
         status: :bad_request
     else
       viewed = @user.viewed
@@ -50,10 +50,10 @@ class Api::UsersController < ApplicationController
   end
 
   def waves
-    @user = User.find_by_guid(params[:guid])
+    @user = User.find(params[:user_id])
 
     if @user.nil?
-      render json: { errors: "could not find user with guid #{params[:guid]}" },
+      render json: { errors: "could not find user with id #{params[:user_id]}" },
         status: :bad_request
     else
       response = []

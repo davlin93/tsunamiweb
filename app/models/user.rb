@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :expires_at, :image, :name, :provider, :token, :uid, :guid,
-    :viewed
+  attr_accessible :id, :viewed, :updated_at, :created_at
 
   has_many :ripples
   has_many :waves
@@ -15,16 +14,6 @@ class User < ActiveRecord::Base
       user.token = auth.credentials.token
       user.expires_at = Time.at(auth.credentials.expires_at)
       user.save!
-    end
-  end
-
-  def self.process_guid(guid)
-    user = User.find_by_guid(guid)
-
-    if user.nil?
-      User.create(guid: guid)
-    else
-      user
     end
   end
 end

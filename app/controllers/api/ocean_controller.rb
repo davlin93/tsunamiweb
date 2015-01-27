@@ -21,7 +21,7 @@ class Api::OceanController < ApplicationController
   end
 
   def local_waves
-    @user = User.process_guid(params[:guid])
+    @user = User.find(params[:user_id])
 
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
@@ -80,7 +80,7 @@ class Api::OceanController < ApplicationController
   end
 
   def splash
-    unless params[:latitude] && params[:longitude] && params[:title] && params[:body] && params[:guid] && params[:content_type]
+    unless params[:latitude] && params[:longitude] && params[:title] && params[:body] && params[:user_id] && params[:content_type]
       render(json: { errors: 'missing params' }, status: :bad_request) && return
     end
     @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude], radius: Ripple::RADIUS)
@@ -89,7 +89,7 @@ class Api::OceanController < ApplicationController
     @wave = Wave.new(content: @content, origin_ripple_id: @ripple.id)
     @wave.ripples << @ripple
 
-    @user = User.process_guid(params[:guid])
+    @user = User.find(params[:user_id])
 
     @wave.save
     @user.ripples << @ripple
@@ -111,11 +111,11 @@ class Api::OceanController < ApplicationController
   end
 
   def dismiss
-    unless params[:wave_id] && params[:guid]
+    unless params[:wave_id] && params[:user_id]
       render(json: { errors: "missing params. Received: #{params}" }, status: :bad_request) && return
     end
 
-    @user = User.process_guid(params[:guid])
+    @user = User.find(params[:user_id])
 
     @wave = Wave.find_by_id(params[:wave_id])
 

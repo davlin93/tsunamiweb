@@ -5,7 +5,7 @@ class DashboardController < ApplicationController
   end
 
   def generate
-    user = User.find_by_guid('root') || User.create(guid: 'root')
+    user = User.find(1)
 
     r = Random.new
     if params[:latitude].present? && params[:longitude].present?

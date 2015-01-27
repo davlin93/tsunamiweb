@@ -19,7 +19,7 @@ describe Api::OceanController do
       @user = FactoryGirl.create(:user)
       @wave = FactoryGirl.create(:wave)
       @wave1 = FactoryGirl.create(:wave)
-      get :local_waves, { latitude: 10.0, longitude: 10.0, guid: @user.guid }, { "Accept" => "application/json" }
+      get :local_waves, { latitude: 10.0, longitude: 10.0, user_id: @user.id }, { "Accept" => "application/json" }
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
       expect(body.length).to eq(0)
@@ -49,7 +49,7 @@ describe Api::OceanController do
       @wave3 = FactoryGirl.create(:wave)
       @wave3.ripples << @ripple3
 
-      get :local_waves, { latitude: 10.0, longitude: 10.0, guid: @user.guid }, { "Accept" => "application/json" }
+      get :local_waves, { latitude: 10.0, longitude: 10.0, user_id: @user.id }, { "Accept" => "application/json" }
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
       expect(body.length).to eq(2)
@@ -76,7 +76,7 @@ describe Api::OceanController do
 
       Timecop.travel(t)
 
-      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: @user.guid }, { "Accept" => "application/json" }
+      get :local_waves, { latitude: 1.0, longitude: 1.0, user_id: @user.id }, { "Accept" => "application/json" }
       
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
@@ -94,7 +94,7 @@ describe Api::OceanController do
         wave.ripples << ripple
       end
 
-      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+      get :local_waves, { latitude: 1.0, longitude: 1.0, user_id: user.id }, { 'Accept' => 'application/json' }
 
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
@@ -106,20 +106,20 @@ describe Api::OceanController do
       wave = FactoryGirl.create(:wave)
       ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, user: user, wave: wave)
 
-      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+      get :local_waves, { latitude: 1.0, longitude: 1.0, user_id: user.id }, { 'Accept' => 'application/json' }
 
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
       expect(body.length).to eq(1)
 
-      post :dismiss, { wave_id: wave.id, guid: user.guid }, { "Content-Type" => "application/json" }
+      post :dismiss, { wave_id: wave.id, user_id: user.id }, { "Content-Type" => "application/json" }
 
       expect(response.code).to eq('200')
 
       new_wave = FactoryGirl.create(:wave)
       new_ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, user: user, wave: new_wave)
 
-      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+      get :local_waves, { latitude: 1.0, longitude: 1.0, user_id: user.id }, { 'Accept' => 'application/json' }
 
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
@@ -133,14 +133,14 @@ describe Api::OceanController do
         ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, user: user, wave: wave)
       end
 
-      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+      get :local_waves, { latitude: 1.0, longitude: 1.0, user_id: user.id }, { 'Accept' => 'application/json' }
 
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
       expect(body.length).to eq(10)
 
       Wave.all.each do |w|
-        post :dismiss, { wave_id: w.id, guid: user.guid }, { "Content-Type" => "application/json" }
+        post :dismiss, { wave_id: w.id, user_id: user.id }, { "Content-Type" => "application/json" }
 
         expect(response.code).to eq('200')
       end
@@ -148,15 +148,15 @@ describe Api::OceanController do
       new_wave = FactoryGirl.create(:wave)
       new_ripple = FactoryGirl.create(:ripple, latitude: 1.0, longitude: 1.0, user: user, wave: new_wave)
 
-      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+      get :local_waves, { latitude: 1.0, longitude: 1.0, user_id: user.id }, { 'Accept' => 'application/json' }
 
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
       expect(body.length).to eq(1)
 
-      post :dismiss, { wave_id: new_wave.id, guid: user.guid }, { "Content-Type" => "application/json" }
+      post :dismiss, { wave_id: new_wave.id, user_id: user.id }, { "Content-Type" => "application/json" }
 
-      get :local_waves, { latitude: 1.0, longitude: 1.0, guid: user.guid }, { 'Accept' => 'application/json' }
+      get :local_waves, { latitude: 1.0, longitude: 1.0, user_id: user.id }, { 'Accept' => 'application/json' }
 
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
@@ -173,7 +173,7 @@ describe Api::OceanController do
       Comment.create(user_id: user.id, wave_id: wave1.id, body: 'comment2 body')
       Comment.create(user_id: user.id, wave_id: wave2.id, body: 'comment3 body')
 
-      get :local_waves, { latitude: 1, longitude: 1, guid: user.guid }, { 'Accept' => 'application/json' }
+      get :local_waves, { latitude: 1, longitude: 1, user_id: user.id }, { 'Accept' => 'application/json' }
 
       expect(response.code).to eq('200')
       body = JSON.parse(response.body)
@@ -183,29 +183,19 @@ describe Api::OceanController do
 
   describe 'POST #splash' do
     context 'creates a splash' do
-      it 'with an existing user guid' do
+      it 'with an existing user' do
         @user = FactoryGirl.create(:user)
-        post :splash, { latitude: 1.5, longitude: 0.5, title: 'test title', body: 'test wave', content_type: 'text', guid: @user.guid }, { "Content-Type" => "application/json" }
+        post :splash, { latitude: 1.5, longitude: 0.5, title: 'test title', body: 'test wave', content_type: 'text', user_id: @user.id }, { "Content-Type" => "application/json" }
         expect(response.code).to eq('201')
         body = JSON.parse(response.body)
         expect(body["content"]["body"]).to eq('test wave')
         expect(body["origin_ripple_id"]).to eq(body["ripples"].first["id"])
         expect(body["ripples"].first["latitude"]).to eq("1.5")
-      end
-
-      it 'without an exisiting user' do
-        guid = "12345"
-        post :splash, { latitude: 1.5, longitude: 0.5, title: 'test title', body: 'test wave', content_type: 'text', guid: guid }, { "Content-Type" => "application/json" }
-        expect(response.code).to eq('201')
-        body = JSON.parse(response.body)
-        expect(body["content"]["body"]).to eq('test wave')
-        expect(body["origin_ripple_id"]).to eq(body["ripples"].first["id"])
-        expect(body["ripples"].first["latitude"]).to eq("1.5")
-        expect(User.find_by_guid(guid)).to_not eq(nil)
       end
 
       it 'with an image_link content_type' do
-        post :splash, { latitude: 1.5, longitude: 0.5, title: 'test title', body: 'test wave', content_type: 'image_link', guid: 'root' }, { "Content-Type" => "application/json" }
+        FactoryGirl.create(:user)
+        post :splash, { latitude: 1.5, longitude: 0.5, title: 'test title', body: 'test wave', content_type: 'image_link', user_id: User.last }, { "Content-Type" => "application/json" }
         expect(response.code).to eq('201')
         body = JSON.parse(response.body)
         expect(body["content"]["type"]).to eq('image_link')
@@ -221,7 +211,7 @@ describe Api::OceanController do
 
       expect(wave.views).to eq(0)
 
-      post :dismiss, { wave_id: wave.id, guid: user.guid }, { "Content-Type" => "application/json" }
+      post :dismiss, { wave_id: wave.id, user_id: user.id }, { "Content-Type" => "application/json" }
 
       wave.reload && user.reload
       expect(response.code).to eq('200')
