@@ -26,7 +26,7 @@ class Api::OceanController < ApplicationController
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
     radius = Ripple::RADIUS
-    @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ? AND (status = 'active')", latitude, longitude, radius).all
+    @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius).all
 
     if @ripples.empty?
       @waves = []
