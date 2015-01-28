@@ -13,8 +13,7 @@ Tsunami::Application.routes.draw do
   delete 'api/dashboard', to: 'dashboard#undo'
 
   namespace :api do
-    resources :users, only: [:index, :create]
-    get 'users/stats', to: 'users#stats'
+    resources :users, only: [:index, :create, :update, :show]
     get 'users/waves', to: 'users#waves'
 
     resources :splash

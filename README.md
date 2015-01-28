@@ -22,10 +22,39 @@ It's Tsunami, motherfuckers.
 
 returns all users
 
-### GET /api/users/stats?user_id=7890
+### GET /api/users/1
+
+returns data for user with id 1
 
 ```
 {
+  "id": 1,
+  "created_at": "2014-12-26T05:23:56Z",
+  "updated_at": "2014-12-26T05:23:56Z",
+  "viewed": 4,
+  "ripples": 3,
+  "ripple_chance": 0.50,
+  "splashes": 2,
+  "views_across_waves": 94,
+  "ripples_across_waves": 3
+}
+```
+
+### PUT /api/users/1
+
+```
+{
+  ... fields to update, WIP ...
+}
+```
+
+updates given fields and returns new user
+
+```
+{
+  "id": 1,
+  "created_at": "2014-12-26T05:23:56Z",
+  "updated_at": "2014-12-26T05:23:56Z",
   "viewed": 4,
   "ripples": 3,
   "ripple_chance": 0.50,
@@ -42,12 +71,16 @@ Returns the list of waves the user splashed
 ### POST /api/users
 
 ```
-{ }
+{ 
+  "guid": "12345678"
+}
 ```
-creates user and returns
+If a user with guid already exists, an error will be thrown.
+Otherwise, creates user and returns
 ```
 {
   "id": 1,
+  "guid": "12345678",
   "created_at": "2014-12-26T05:23:56Z",
   "updated_at": "2014-12-26T05:23:56Z",
   "viewed": 0

@@ -23,38 +23,52 @@ class Api::UsersController < ApplicationController
     end
   end
 
-  def stats
-    @user = User.find(params[:user_id])
+  def update
+    user = User.find(params[:id])
 
-    if @user.nil?
+    unless user
       render json: { errors: "could not find user with id #{params[:user_id]}" },
         status: :bad_request
-    else
-      viewed = @user.viewed
-      ripples = @user.ripples.count
-
-      if ripples == 0
-        ripple_chance = 0.0
-      elsif viewed == 0
-        ripple_chance = 1.0
-      else
-        ripple_chance = ripples.to_f / viewed.to_f
-      end
-
-      splashes = @user.waves.count
-      views_across_waves = Wave.where('user_id = ?', @user.id).sum('views')
-      ripples_across_waves = Wave.where('waves.user_id = ?', @user.id).joins(:ripples).count
-      response = {
-          viewed: viewed,
-          ripples: ripples,
-          splashes: splashes,
-          ripple_chance: ripple_chance.round(2),
-          views_across_waves: views_across_waves,
-          ripples_across_waves: ripples_across_waves
-      }
-
-      render json: response, status: :ok
     end
+
+    render json: user, status: :ok
+  end
+
+  def show
+    user = User.find(params[:id])
+
+    unless user
+      render json: { errors: "could not find user with id #{params[:user_id]}" },
+        status: :bad_request
+    end
+
+    viewed = user.viewed
+    ripples = user.ripples.count
+
+    if ripples == 0
+      ripple_chance = 0.0
+    elsif viewed == 0
+      ripple_chance = 1.0
+    else
+      ripple_chance = ripples.to_f / viewed.to_f
+    end
+
+    splashes = user.waves.count
+    views_across_waves = Wave.where(user_id: user.id).sum('views')
+    ripples_across_waves = Wave.where(user_id: user.id).joins(:ripples).count
+    response = {
+        id: user.id,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+        viewed: viewed,
+        ripples: ripples,
+        splashes: splashes,
+        ripple_chance: ripple_chance.round(2),
+        views_across_waves: views_across_waves,
+        ripples_across_waves: ripples_across_waves
+    }
+
+    render json: response, status: :ok
   end
 
   def waves
