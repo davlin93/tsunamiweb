@@ -26,24 +26,15 @@ class Api::OceanController < ApplicationController
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
     radius = Ripple::RADIUS
-    @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ? AND (status = 'active')", latitude, longitude, radius).all
-
-    @ripples.delete_if do |ripple|
-      # this should be a resque worker or something to auto update
-      # updating these here seems very bad, temporary for small scale
-      if ripple.created_at < 2.days.ago
-        ripple.status = 'inactive'
-        ripple.save # n+1 query
-        true
-      end
-    end
+    @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius).all
 
     if @ripples.empty?
       @waves = []
     else
       wave_ids = @ripples.map(&:wave_id).uniq
       viewed_wave_ids = Wave.joins('FULL JOIN view_records ON view_records.wave_id = waves.id')
-                            .where('waves.id IN (?) AND (view_records.user_id = ?)', wave_ids, @user.id)
+                            .where("waves.id IN (?) AND (view_records.user_id = ?)", wave_ids, @user.id)
+                            .active
                             .pluck('waves.id')
 
       new_wave_ids = wave_ids - viewed_wave_ids
@@ -51,10 +42,12 @@ class Api::OceanController < ApplicationController
       if new_wave_ids.empty?
         ViewRecord.where('user_id = ?', @user.id).destroy_all
         @waves =  Wave.where('waves.id IN (?)', wave_ids)
+                      .active
                       .order('created_at DESC')
                       .limit(10)
       else
         @waves =  Wave.where('waves.id IN (?)', new_wave_ids)
+                      .active
                       .limit(10)
       end
     end

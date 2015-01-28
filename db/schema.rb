@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150127221958) do
+ActiveRecord::Schema.define(:version => 20150128002358) do
 
   create_table "comments", :force => true do |t|
     t.integer  "wave_id"
@@ -32,11 +32,10 @@ ActiveRecord::Schema.define(:version => 20150127221958) do
     t.decimal  "latitude",   :precision => 7, :scale => 4
     t.decimal  "longitude",  :precision => 7, :scale => 4
     t.decimal  "radius",     :precision => 7, :scale => 4
-    t.datetime "created_at",                                                     :null => false
-    t.datetime "updated_at",                                                     :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
     t.integer  "wave_id"
     t.integer  "user_id"
-    t.string   "status",                                   :default => "active"
   end
 
   create_table "users", :force => true do |t|

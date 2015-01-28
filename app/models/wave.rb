@@ -6,6 +6,8 @@ class Wave < ActiveRecord::Base
   has_one :content
   has_many :comments
 
+  scope :active, -> { where("waves.updated_at > (NOW() - INTERVAL '7 days')") }
+
   def to_response
     {
       id: self.id,
