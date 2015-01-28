@@ -6,7 +6,15 @@ class Api::UsersController < ApplicationController
   end
 
   def create
-    @user = User.new
+    unless params[:guid]
+      render(json: { errors: 'missing paramater guid' }, status: :bad_request) && return
+    end
+
+    if User.find_by_guid(params[:guid])
+      render(json: { errors: 'user already exists with that guid' }) && return
+    else
+      @user = User.new(guid: params[:guid])
+    end
 
     if @user.save
       render json: @user, status: :created

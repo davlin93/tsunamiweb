@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150128002358) do
+ActiveRecord::Schema.define(:version => 20150128224744) do
 
   create_table "comments", :force => true do |t|
     t.integer  "wave_id"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(:version => 20150128002358) do
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
     t.integer  "viewed",     :default => 0
+    t.string   "guid"
   end
 
   create_table "view_records", :force => true do |t|

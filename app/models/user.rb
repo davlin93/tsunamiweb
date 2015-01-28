@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :id, :viewed, :updated_at, :created_at
+  attr_accessible :id, :viewed, :updated_at, :created_at, :guid
 
   has_many :ripples
   has_many :waves
