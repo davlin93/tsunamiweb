@@ -31,7 +31,22 @@ class Api::UsersController < ApplicationController
         status: :bad_request
     end
 
-    render json: user, status: :ok
+    existing_services = user.social_profiles.pluck(:service)
+
+    params[:social_profiles].each do |service, handle|
+      if existing_services.include?(service)
+        profile = user.social_profiles.where(service: service).first
+        profile.alias = handle
+        profile.save
+      else
+        profile = SocialProfile.create(service: service, alias: handle)
+        user.social_profiles << profile
+      end
+    end
+
+    user.save
+
+    render json: user.to_response, status: :ok
   end
 
   def show
@@ -60,6 +75,7 @@ class Api::UsersController < ApplicationController
         id: user.id,
         created_at: user.created_at,
         updated_at: user.updated_at,
+        social_profiles: user.social_profiles,
         viewed: viewed,
         ripples: ripples,
         splashes: splashes,
@@ -88,7 +104,9 @@ class Api::UsersController < ApplicationController
             origin_ripple_id: wave.origin_ripple_id,
             views: wave.views,
             content: wave.content,
-            ripples: wave.ripples
+            ripples: wave.ripples,
+            comments: wave.comments,
+            user: wave.user
           }
         response << json
       end
