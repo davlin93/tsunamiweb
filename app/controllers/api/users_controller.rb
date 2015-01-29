@@ -90,10 +90,10 @@ class Api::UsersController < ApplicationController
   end
 
   def waves
-    @user = User.find(params[:user_id])
+    @user = User.find(params[:id])
 
     if @user.nil?
-      render json: { errors: "could not find user with id #{params[:user_id]}" },
+      render json: { errors: "could not find user with id #{params[:id]}" },
         status: :bad_request
     else
       response = []
