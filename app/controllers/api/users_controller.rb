@@ -76,12 +76,14 @@ class Api::UsersController < ApplicationController
         created_at: user.created_at,
         updated_at: user.updated_at,
         social_profiles: user.social_profiles,
-        viewed: viewed,
-        ripples: ripples,
-        splashes: splashes,
-        ripple_chance: ripple_chance.round(2),
-        views_across_waves: views_across_waves,
-        ripples_across_waves: ripples_across_waves
+        stats: {
+          viewed: viewed,
+          ripples: ripples,
+          splashes: splashes,
+          ripple_chance: ripple_chance.round(2),
+          views_across_waves: views_across_waves,
+          ripples_across_waves: ripples_across_waves
+        }
     }
 
     render json: response, status: :ok

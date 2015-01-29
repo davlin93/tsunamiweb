@@ -44,17 +44,38 @@ returns data for user with id 1
 
 ```
 {
-  ... fields to update, WIP ...
+  "social_profiles":
+  {
+    "twitter": "my_handle",
+    "facebook": "my_facebook"
+  }
 }
 ```
 
-updates given fields and returns new user
+updates (or creates) given fields and returns new user
 
 ```
 {
   "id": 1,
   "created_at": "2014-12-26T05:23:56Z",
   "updated_at": "2014-12-26T05:23:56Z",
+  "social_profiles":
+  [
+    {
+      "alias": "my_handle",
+      "service": "twitter",
+      "id": 1,
+      "created_at": "2014-12-26T05:23:56Z",
+      "updated_at": "2014-12-26T05:23:56Z"
+    },
+    {
+      "alias": "my_facebook",
+      "service": "facebook",
+      "id": 1,
+      "created_at": "2014-12-26T05:23:56Z",
+      "updated_at": "2014-12-26T05:23:56Z"
+    }
+  ],
   "viewed": 4,
   "ripples": 3,
   "ripple_chance": 0.50,
