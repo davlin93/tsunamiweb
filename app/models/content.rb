@@ -6,7 +6,7 @@ class Content < ActiveRecord::Base
   def to_response
     {
       id: id,
-      type: content_type,
+      content_type: content_type,
       title: title,
       body: body
     }
