@@ -62,14 +62,14 @@ updates (or creates) given fields and returns new user
   "social_profiles":
   [
     {
-      "alias": "my_handle",
+      "username": "my_handle",
       "service": "twitter",
       "id": 1,
       "created_at": "2014-12-26T05:23:56Z",
       "updated_at": "2014-12-26T05:23:56Z"
     },
     {
-      "alias": "my_facebook",
+      "username": "my_facebook",
       "service": "facebook",
       "id": 1,
       "created_at": "2014-12-26T05:23:56Z",

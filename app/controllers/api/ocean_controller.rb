@@ -21,6 +21,10 @@ class Api::OceanController < ApplicationController
   end
 
   def local_waves
+    unless params[:latitude] && params[:longitude] && params[:user_id]
+      render(json: { errors: 'missing params' }) && return
+    end
+
     @user = User.find(params[:user_id])
 
     latitude = params[:latitude].to_f

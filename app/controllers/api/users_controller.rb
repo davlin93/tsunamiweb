@@ -36,10 +36,10 @@ class Api::UsersController < ApplicationController
     params[:social_profiles].each do |service, handle|
       if existing_services.include?(service)
         profile = user.social_profiles.where(service: service).first
-        profile.alias = handle
+        profile.username = handle
         profile.save
       else
-        profile = SocialProfile.create(service: service, alias: handle)
+        profile = SocialProfile.create(service: service, username: handle)
         user.social_profiles << profile
       end
     end
