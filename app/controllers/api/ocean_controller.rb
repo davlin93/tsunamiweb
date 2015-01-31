@@ -21,6 +21,10 @@ class Api::OceanController < ApplicationController
   end
 
   def local_waves
+    unless params[:latitude] && params[:longitude] && params[:user_id]
+      render(json: { errors: 'missing params' }) && return
+    end
+
     @user = User.find(params[:user_id])
 
     latitude = params[:latitude].to_f
@@ -55,31 +59,21 @@ class Api::OceanController < ApplicationController
     response = []
     wave_ids = []
     @waves.each do |wave|
-      json = { 
-          id: wave.id,
-          created_at: wave.created_at,
-          updated_at: wave.updated_at,
-          origin_ripple_id: wave.origin_ripple_id,
-          views: wave.views,
-          content: wave.content, # n+1 query
-          ripples: wave.ripples, # n+1 query
-          comments: wave.comments,
-          user: wave.user
-        }
-      response << json
+      response << wave.to_response
     end
 
     render json: response
   end
 
   def splash
-    unless params[:latitude] && params[:longitude] && params[:title] && params[:body] && params[:user_id] && params[:content_type]
+    unless params[:latitude] && params[:longitude] && params[:title] && params[:body] &&
+      params[:user_id] && params[:content_type] && params[:social_profile_id]
       render(json: { errors: 'missing params' }, status: :bad_request) && return
     end
     @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude], radius: Ripple::RADIUS)
     @ripple.save
     @content = Content.new(title: params[:title], body: params[:body], content_type: params[:content_type])
-    @wave = Wave.new(content: @content, origin_ripple_id: @ripple.id)
+    @wave = Wave.new(content: @content, origin_ripple_id: @ripple.id, social_profile_id: params[:social_profile_id])
     @wave.ripples << @ripple
 
     @user = User.find(params[:user_id])
@@ -95,7 +89,7 @@ class Api::OceanController < ApplicationController
         views: @wave.views,
         content: @wave.content.to_response,
         ripples: [@ripple],
-        user: @user
+        user: @user.to_response(@wave.social_profile_id)
       }
       render json: response, status: :created
     else

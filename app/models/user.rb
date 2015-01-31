@@ -18,13 +18,20 @@ class User < ActiveRecord::Base
     end
   end
 
-  def to_response
-    {
+  def to_response(profile_id = nil)
+    hash = {
       id: id,
       created_at: created_at,
       updated_at: updated_at,
-      viewed: viewed,
-      social_profiles: social_profiles
-    }.to_json
+      viewed: viewed
+    }
+
+    if profile_id
+      hash[:social_profiles] = SocialProfile.find(profile_id)
+    else
+      hash[:social_profiles] = social_profiles
+    end
+
+    hash
   end
 end

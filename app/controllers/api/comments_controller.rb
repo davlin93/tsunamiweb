@@ -1,12 +1,12 @@
 class Api::CommentsController < ApplicationController
   def create
-    unless params[:user_id] && params[:wave_id] && params[:body]
+    unless params[:user_id] && params[:wave_id] && params[:body] && params[:social_profile_id]
       render(json: { errors: 'missing params' }, status: :bad_request) && return
     end
 
     user = User.find(params[:user_id])
 
-    comment = Comment.create(user_id: user.id, wave_id: params[:wave_id], body: params[:body])
+    comment = Comment.create(user_id: user.id, wave_id: params[:wave_id], body: params[:body], social_profile_id: params[:social_profile_id])
 
     wave = Wave.find(params[:wave_id])
 
