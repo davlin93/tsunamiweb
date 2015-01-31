@@ -46,7 +46,7 @@ class Api::UsersController < ApplicationController
 
     user.save
 
-    render json: user.to_response, status: :ok
+    render json: user.to_response(false), status: :ok
   end
 
   def show

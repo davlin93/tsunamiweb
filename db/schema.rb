@@ -11,14 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150128233224) do
+ActiveRecord::Schema.define(:version => 20150129030929) do
 
   create_table "comments", :force => true do |t|
     t.integer  "wave_id"
     t.integer  "user_id"
     t.string   "body"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.integer  "social_profile_id"
   end
 
   create_table "contents", :force => true do |t|
@@ -61,12 +62,13 @@ ActiveRecord::Schema.define(:version => 20150128233224) do
   end
 
   create_table "waves", :force => true do |t|
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.integer  "origin_ripple_id"
     t.integer  "user_id"
     t.integer  "content_id"
-    t.integer  "views",            :default => 0
+    t.integer  "views",             :default => 0
+    t.integer  "social_profile_id"
   end
 
   add_index "waves", ["user_id"], :name => "index_waves_on_user_id"
