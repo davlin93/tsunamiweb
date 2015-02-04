@@ -249,3 +249,9 @@ request:
 }
 ```
 creates a comment on wave 1 from user with id 1, then returns 201
+
+## Social Profile
+
+### PUT /api/social_profiles/1
+
+Records an outgoing click on specified profile and returns updated profile
