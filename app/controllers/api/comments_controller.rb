@@ -1,6 +1,6 @@
 class Api::CommentsController < ApplicationController
   def create
-    unless params[:user_id] && params[:wave_id] && params[:body] && params[:social_profile_id]
+    unless params[:user_id] && params[:wave_id] && params[:body]
       render(json: { errors: 'missing params' }, status: :bad_request) && return
     end
 
