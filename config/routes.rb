@@ -24,6 +24,8 @@ Tsunami::Application.routes.draw do
     post 'ocean/splash', to: 'ocean#splash'
 
     resources :comments, only: [:create]
+
+    resources :social_profiles, only: [:update]
   end
 
   # Sample of regular route:

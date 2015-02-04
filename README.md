@@ -28,15 +28,37 @@ returns data for user with id 1
 
 ```
 {
-  "id": 1,
-  "created_at": "2014-12-26T05:23:56Z",
-  "updated_at": "2014-12-26T05:23:56Z",
-  "viewed": 4,
-  "ripples": 3,
-  "ripple_chance": 0.50,
-  "splashes": 2,
-  "views_across_waves": 94,
-  "ripples_across_waves": 3
+    "id": 1,
+    "created_at": "2015-01-31T05:59:35Z",
+    "updated_at": "2015-01-31T06:00:45Z",
+    "social_profiles": [
+        {
+            "clicks": 5,
+            "created_at": "2015-01-31T06:00:08Z",
+            "id": 2,
+            "service": "facebook",
+            "updated_at": "2015-01-31T06:00:08Z",
+            "user_id": 1,
+            "username": "lind"
+        },
+        {
+            "clicks": 0,
+            "created_at": "2015-01-31T06:00:08Z",
+            "id": 1,
+            "service": "tsunami",
+            "updated_at": "2015-02-04T20:43:38Z",
+            "user_id": 1,
+            "username": "davlin"
+        }
+    ],
+    "stats": {
+        "viewed": 5,
+        "ripples": 1,
+        "splashes": 0,
+        "ripple_chance": 0.2,
+        "views_across_waves": 0,
+        "ripples_across_waves": 0
+    }
 }
 ```
 
@@ -56,36 +78,34 @@ updates (or creates) given fields and returns new user
 
 ```
 {
-  "id": 1,
-  "created_at": "2014-12-26T05:23:56Z",
-  "updated_at": "2014-12-26T05:23:56Z",
-  "social_profiles":
-  [
-    {
-      "username": "my_handle",
-      "service": "twitter",
-      "id": 1,
-      "created_at": "2014-12-26T05:23:56Z",
-      "updated_at": "2014-12-26T05:23:56Z"
-    },
-    {
-      "username": "my_facebook",
-      "service": "facebook",
-      "id": 1,
-      "created_at": "2014-12-26T05:23:56Z",
-      "updated_at": "2014-12-26T05:23:56Z"
-    }
-  ],
-  "viewed": 4,
-  "ripples": 3,
-  "ripple_chance": 0.50,
-  "splashes": 2,
-  "views_across_waves": 94,
-  "ripples_across_waves": 3
+    "id": 1,
+    "created_at": "2015-01-31T05:59:35Z",
+    "updated_at": "2015-01-31T06:00:45Z",
+    "viewed": 5,
+    "social_profiles": [
+        {
+            "clicks": 0,
+            "created_at": "2015-01-31T06:00:08Z",
+            "id": 2,
+            "service": "facebook",
+            "updated_at": "2015-01-31T06:00:08Z",
+            "user_id": 1,
+            "username": "lind"
+        },
+        {
+            "clicks": 1,
+            "created_at": "2015-01-31T06:00:08Z",
+            "id": 1,
+            "service": "tsunami",
+            "updated_at": "2015-02-04T20:50:23Z",
+            "user_id": 1,
+            "username": "davidlin"
+        }
+    ]
 }
 ```
 
-### GET /api/users/waves?user_id=7890
+### GET /api/users/1/waves
 
 Returns the list of waves the user splashed
 
@@ -249,3 +269,9 @@ request:
 }
 ```
 creates a comment on wave 1 from user with id 1, then returns 201
+
+## Social Profile
+
+### PUT /api/social_profiles/1
+
+Records an outgoing click on specified profile and returns updated profile
