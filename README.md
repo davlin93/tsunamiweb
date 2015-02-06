@@ -58,6 +58,9 @@ returns data for user with id 1
         "ripple_chance": 0.2,
         "views_across_waves": 0,
         "ripples_across_waves": 0
+    },
+    "waves": {
+        ... all waves splashed by user ...
     }
 }
 ```

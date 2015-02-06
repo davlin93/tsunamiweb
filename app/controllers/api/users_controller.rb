@@ -83,7 +83,8 @@ class Api::UsersController < ApplicationController
           ripple_chance: ripple_chance.round(2),
           views_across_waves: views_across_waves,
           ripples_across_waves: ripples_across_waves
-        }
+        },
+        waves: user.waves
     }
 
     render json: response, status: :ok

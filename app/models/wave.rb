@@ -22,4 +22,18 @@ class Wave < ActiveRecord::Base
       user: single_social_profile ? user.to_response(social_profile_id) : user.to_response
     }
   end
+
+  def serializable_hash(options)
+    {
+      id: self.id,
+      created_at: self.created_at,
+      updated_at: self.updated_at,
+      origin_ripple_id: self.origin_ripple_id,
+      views: self.views,
+      content: self.content,
+      ripples: self.ripples,
+      comments: self.comments,
+      user: user.to_response(social_profile_id)
+    }
+  end
 end
