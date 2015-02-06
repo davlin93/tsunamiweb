@@ -48,21 +48,17 @@ class Api::OceanController < ApplicationController
         @waves =  Wave.where('waves.id IN (?)', wave_ids)
                       .active
                       .order('created_at DESC')
+                      .includes(:content, :ripples, comments: [{ user: :social_profiles }])
                       .limit(10)
       else
         @waves =  Wave.where('waves.id IN (?)', new_wave_ids)
                       .active
+                      .includes(:content, :ripples, comments: [{ user: :social_profiles }])
                       .limit(10)
       end
     end
 
-    response = []
-    wave_ids = []
-    @waves.each do |wave|
-      response << wave.to_response
-    end
-
-    render json: response
+    render json: @waves
   end
 
   def splash
