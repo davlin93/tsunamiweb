@@ -25,6 +25,8 @@ class Api::OceanController < ApplicationController
       render(json: { errors: 'missing params' }) && return
     end
 
+    wave_limit = params[:limit] ? params[:limit] : 10
+
     @user = User.find(params[:user_id])
 
     latitude = params[:latitude].to_f
@@ -49,12 +51,12 @@ class Api::OceanController < ApplicationController
                       .active
                       .order('created_at DESC')
                       .includes(:content, :ripples, comments: [{ user: :social_profiles }])
-                      .limit(10)
+                      .limit(wave_limit)
       else
         @waves =  Wave.where('waves.id IN (?)', new_wave_ids)
                       .active
                       .includes(:content, :ripples, comments: [{ user: :social_profiles }])
-                      .limit(10)
+                      .limit(wave_limit)
       end
     end
 

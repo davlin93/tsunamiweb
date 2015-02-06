@@ -171,9 +171,9 @@ then returns:
 
 returns all waves (content, no location)
 
-### GET /api/ocean/local_waves?latitude=50&longitude=50&user_id=1
+### GET /api/ocean/local_waves?latitude=50&longitude=50&user_id=1&limit=10
 
-returns all waves that have active ripples within radius
+returns `limit` waves (default 10) that have active ripples within radius
 ```
 [
   {
