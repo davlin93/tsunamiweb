@@ -64,13 +64,22 @@ class Api::OceanController < ApplicationController
   end
 
   def splash
-    unless params[:latitude] && params[:longitude] && params[:title] && params[:body] &&
-      params[:user_id] && params[:content_type]
+    unless params[:latitude] && params[:longitude] && params[:caption] &&
+      params[:user_id] && params[:type]
       render(json: { errors: 'missing params' }, status: :bad_request) && return
     end
     @ripple = Ripple.new(latitude: params[:latitude], longitude: params[:longitude], radius: Ripple::RADIUS)
     @ripple.save
-    @content = Content.new(title: params[:title], body: params[:body], content_type: params[:content_type])
+
+    case params[:type]
+    when 'image'
+      @content = ImageContent.new(link: params[:link], caption: params[:caption])
+    when 'text'
+      @content = TextContent.new(caption: params[:caption])
+    else
+      render(json: { errors: "did not recognize type #{params[:type]}" }) && return
+    end
+
     @wave = Wave.new(content: @content, origin_ripple_id: @ripple.id, social_profile_id: params[:social_profile_id])
     @wave.ripples << @ripple
 
