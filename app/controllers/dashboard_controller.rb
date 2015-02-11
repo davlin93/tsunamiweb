@@ -24,8 +24,17 @@ class DashboardController < ApplicationController
     ripple.user = user
     ripple.save
     ripple_ids = [ripple.id]
-    content = Content.new(title: params[:title], body: params[:body], content_type: params[:content_type])
+    
+    case params[:type]
+    when 'image'
+      content = ImageContent.new(link: params[:link], caption: params[:caption])
+    when 'text'
+      content = TextContent.new(caption: params[:caption])
+    else
+      
+    end
     content.save
+
     wave = Wave.new(content: content, origin_ripple_id: ripple.id)
     wave.user = user
     wave.save
