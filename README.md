@@ -217,8 +217,9 @@ returns `limit` waves (default 10) that have active ripples within radius
 {
   "latitude": 123.4567,
   "longitude": 123.4567,
-  "title": "wave title",
-  "body": "wave body",
+  "caption": "wave caption",
+  "link": "imgur.com/45237489",
+  "type": "image",
   "user_id": 1
 }
 ```

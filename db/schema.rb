@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150204203847) do
+ActiveRecord::Schema.define(:version => 20150211200119) do
 
   create_table "comments", :force => true do |t|
     t.integer  "wave_id"
@@ -23,10 +23,10 @@ ActiveRecord::Schema.define(:version => 20150204203847) do
   end
 
   create_table "contents", :force => true do |t|
-    t.string  "title"
-    t.string  "body"
+    t.string  "caption"
     t.integer "wave_id"
-    t.string  "content_type"
+    t.string  "type"
+    t.string  "link"
   end
 
   create_table "ripples", :force => true do |t|

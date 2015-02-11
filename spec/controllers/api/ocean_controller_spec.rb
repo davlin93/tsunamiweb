@@ -185,21 +185,21 @@ describe Api::OceanController do
     context 'creates a splash' do
       it 'with an existing user' do
         user = FactoryGirl.create(:user)
-        post :splash, { latitude: 1.5, longitude: 0.5, title: 'test title', body: 'test wave', content_type: 'text', user_id: user.id, social_profile_id: user.social_profiles.first.id }, { "Content-Type" => "application/json" }
+        post :splash, { latitude: 1.5, longitude: 0.5, caption: 'test wave', type: 'text', user_id: user.id, social_profile_id: user.social_profiles.first.id }, { "Content-Type" => "application/json" }
         expect(response.code).to eq('201')
         body = JSON.parse(response.body)
-        expect(body["content"]["body"]).to eq('test wave')
+        expect(body["content"]["caption"]).to eq('test wave')
         expect(body["origin_ripple_id"]).to eq(body["ripples"].first["id"])
         expect(body["ripples"].first["latitude"]).to eq("1.5")
       end
 
       it 'with an image_link content_type' do
         user = FactoryGirl.create(:user)
-        post :splash, { latitude: 1.5, longitude: 0.5, title: 'test title', body: 'test wave', content_type: 'image_link', user_id: User.last, social_profile_id: user.social_profiles.first.id }, { "Content-Type" => "application/json" }
+        post :splash, { latitude: 1.5, longitude: 0.5, link: 'google.com', caption: 'test caption', type: 'image', user_id: User.last, social_profile_id: user.social_profiles.first.id }, { "Content-Type" => "application/json" }
         expect(response.code).to eq('201')
         body = JSON.parse(response.body)
-        expect(body["content"]["content_type"]).to eq('image_link')
-        expect(Content.last.content_type).to eq('image_link')
+        expect(body["content"]["type"]).to eq('ImageContent')
+        expect(Content.last.type).to eq('ImageContent')
       end
     end
   end

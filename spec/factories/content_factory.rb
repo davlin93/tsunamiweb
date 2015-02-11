@@ -1,10 +1,7 @@
 FactoryGirl.define do
   factory :content do
-    sequence :title do |n|
-      "Title #{n}"
-    end
-    sequence :body do |n|
-      "Body #{n}"
+    sequence :caption do |n|
+      "caption #{n}"
     end
   end
 end
