@@ -72,9 +72,9 @@ class Api::OceanController < ApplicationController
     @ripple.save
 
     case params[:type]
-    when 'image'
+    when 'ImageContent'
       @content = ImageContent.new(link: params[:link], caption: params[:caption])
-    when 'text'
+    when 'TextContent'
       @content = TextContent.new(caption: params[:caption])
     else
       render(json: { errors: "did not recognize type #{params[:type]}" }) && return
