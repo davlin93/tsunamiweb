@@ -38,12 +38,12 @@ class Api::OceanController < ApplicationController
       @waves = []
     else
       wave_ids = @ripples.map(&:wave_id).uniq
-      viewed_wave_ids = Wave.joins('FULL JOIN view_records ON view_records.wave_id = waves.id')
-                            .where("waves.id IN (?) AND (view_records.user_id = ?)", wave_ids, @user.id)
-                            .active
-                            .pluck('waves.id')
 
-      new_wave_ids = wave_ids - viewed_wave_ids
+      new_wave_ids =  Wave.joins('FULL JOIN view_records ON view_records.wave_id = waves.id')
+                      .joins(:ripples)
+                      .where("SQRT(POWER((ripples.latitude - ?), 2) + POWER((ripples.longitude - ?), 2)) < ?
+                              AND (view_records.user_id = ?)", latitude, longitude, radius, @user.id)
+                      .pluck('waves.id')
 
       if new_wave_ids.empty?
         ViewRecord.where('user_id = ?', @user.id).destroy_all
