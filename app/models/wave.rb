@@ -16,7 +16,7 @@ class Wave < ActiveRecord::Base
       updated_at: self.updated_at,
       origin_ripple_id: self.origin_ripple_id,
       views: self.views,
-      content: self.content,
+      content: self.content.to_response,
       ripples: self.ripples,
       comments: self.comments,
       user: single_social_profile ? user.to_response(social_profile_id) : user.to_response
@@ -30,7 +30,7 @@ class Wave < ActiveRecord::Base
       updated_at: self.updated_at,
       origin_ripple_id: self.origin_ripple_id,
       views: self.views,
-      content: self.content,
+      content: self.content.to_response,
       ripples: self.ripples,
       comments: self.comments,
       user: user.to_response(social_profile_id)
