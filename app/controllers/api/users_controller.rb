@@ -106,7 +106,7 @@ class Api::UsersController < ApplicationController
             id: wave.id,
             origin_ripple_id: wave.origin_ripple_id,
             views: wave.views,
-            content: wave.content,
+            content: wave.content.to_response,
             ripples: wave.ripples,
             comments: wave.comments,
             user: wave.user
