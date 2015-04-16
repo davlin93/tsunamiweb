@@ -94,6 +94,8 @@ class Api::OceanController < ApplicationController
         id: @wave.id,
         origin_ripple_id: @wave.origin_ripple_id,
         views: @wave.views,
+        created_at: @wave.created_at,
+        updated_at: @wave.updated_at,
         content: @wave.content.to_response,
         ripples: [@ripple],
         user: @user.to_response(@wave.social_profile_id)
