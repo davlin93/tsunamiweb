@@ -32,32 +32,34 @@ class Api::OceanController < ApplicationController
     latitude = params[:latitude].to_f
     longitude = params[:longitude].to_f
     radius = Ripple::RADIUS
-    @ripples = Ripple.where("SQRT(POWER((latitude - ?), 2) + POWER((longitude - ?), 2)) < ?", latitude, longitude, radius).all
 
-    if @ripples.empty?
-      @waves = []
-    else
-      wave_ids = @ripples.map(&:wave_id).uniq
+    wave_ids =  Wave.joins(:ripples)
+                    .where("SQRT(POWER((ripples.latitude - ?), 2)
+                      + POWER((ripples.longitude - ?), 2)) < ?", latitude, longitude, radius)
+                    .active
+                    .pluck('waves.id')
 
-      new_wave_ids =  Wave.joins('FULL JOIN view_records ON view_records.wave_id = waves.id')
+    viewed_ids =  Wave.joins('FULL JOIN view_records ON view_records.wave_id = waves.id')
                       .joins(:ripples)
                       .where("SQRT(POWER((ripples.latitude - ?), 2) + POWER((ripples.longitude - ?), 2)) < ?
-                              AND (view_records.user_id = ?)", latitude, longitude, radius, @user.id)
+                             AND (view_records.user_id = ?)", latitude, longitude, radius, @user.id)
+                      .active
                       .pluck('waves.id')
 
-      if new_wave_ids.empty?
-        ViewRecord.where('user_id = ?', @user.id).destroy_all
-        @waves =  Wave.where('waves.id IN (?)', wave_ids)
-                      .active
-                      .order('created_at DESC')
-                      .includes(:content, :ripples, comments: [{ user: :social_profiles }])
-                      .limit(wave_limit)
-      else
-        @waves =  Wave.where('waves.id IN (?)', new_wave_ids)
-                      .active
-                      .includes(:content, :ripples, comments: [{ user: :social_profiles }])
-                      .limit(wave_limit)
-      end
+    new_wave_ids = wave_ids - viewed_ids
+
+    if new_wave_ids.empty?
+      ViewRecord.where('user_id = ?', @user.id).destroy_all
+      @waves =  Wave.where('waves.id IN (?)', wave_ids)
+                    .active
+                    .order('created_at DESC')
+                    .includes(:content, :ripples, comments: [{ user: :social_profiles }])
+                    .limit(wave_limit)
+    else
+      @waves =  Wave.where('waves.id IN (?)', new_wave_ids)
+                    .active
+                    .includes(:content, :ripples, comments: [{ user: :social_profiles }])
+                    .limit(wave_limit)
     end
 
     render json: @waves
