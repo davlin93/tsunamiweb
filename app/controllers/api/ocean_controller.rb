@@ -39,6 +39,11 @@ class Api::OceanController < ApplicationController
                     .active
                     .pluck('waves.id')
 
+    if wave_ids.size < 10
+      generate_count = 10 - wave_ids.size
+      titles = Reddit.getShowerThoughts(generate_count)
+    end
+
     viewed_ids =  Wave.joins('FULL JOIN view_records ON view_records.wave_id = waves.id')
                       .joins(:ripples)
                       .where("SQRT(POWER((ripples.latitude - ?), 2) + POWER((ripples.longitude - ?), 2)) < ?
