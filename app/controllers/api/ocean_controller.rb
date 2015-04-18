@@ -42,6 +42,8 @@ class Api::OceanController < ApplicationController
     if wave_ids.size < 10
       generate_count = 10 - wave_ids.size
       titles = Reddit.getShowerThoughts(generate_count)
+      gen_waves = MockWave.generate(titles, params[:latitude], params[:longitude])
+      wave_ids += gen_waves
     end
 
     viewed_ids =  Wave.joins('FULL JOIN view_records ON view_records.wave_id = waves.id')

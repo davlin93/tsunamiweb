@@ -1,6 +1,6 @@
 class Wave < ActiveRecord::Base
   attr_accessible :id, :content, :origin_ripple_id, :views,
-                  :social_profile_id
+                  :social_profile_id, :user
 
   has_many :ripples
   belongs_to :user
