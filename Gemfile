@@ -21,11 +21,11 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+gem 'jwt', '~> 1.2.1'
 gem 'newrelic_rpm'
 gem 'passenger'
 gem 'jquery-rails'
 gem 'slim-rails'
-gem 'omniauth-facebook'
 gem "therubyracer"
 gem "less-rails"
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'

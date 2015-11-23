@@ -73,6 +73,13 @@ class Api::OceanController < ApplicationController
   end
 
   def splash
+    payload = process_jwt(params[:token])
+    params = payload
+
+    unless params
+      render(json: { errors: ['bad token'] }, status: :forbidden) && return
+    end
+
     unless params[:latitude] && params[:longitude] && params[:caption] &&
       params[:user_id] && params[:type]
       render(json: { errors: 'missing params' }, status: :bad_request) && return
